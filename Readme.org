@@ -1,0 +1,31 @@
+* EverOrg
+
+** Objective 
+
+*** Migrate all content from Evernote to Org mode
+
+    I'm a long term paying user of Evernote. I'm not happy with the
+    new pricing policy. 
+
+    In the past I've constantly switched between Org mode and a
+    Evernote/Remember the Milk combination due to the lack of mobile
+    support of Org mode. As this changes now due to the initiative of
+    [[https://github.com/MobileOrg/mobileorg.next][MobileOrg v2]], it's time to migrate my stuff fully over to Org
+    mode.
+
+    One the reasons of using Evernote was the possibilty to export all
+    of my content into xml. This project uses the Evernote
+    backup-files to generate Org mode files. 
+
+** Platform
+   
+    EverOrg is developed in Swift on MacOS. The aim is that EverOrg is
+    platform independable so that Windows users have at least the
+    possibilty to use it in a VM under Linux.
+
+** License
+
+    EverOrg is distributed under the GNU Public License
+    version 3. See  [[https://github.com/mgmart/EverOrg/blob/master/License.md][License.md]] for more info
+
+    

@@ -1,5 +1,5 @@
 //
-//  main.swift
+//  ConsoleIO.swift
 //  EverOrg
 //
 //  Created by Mario Martelli on 03.02.17.
@@ -20,14 +20,23 @@
 //  You should have received a copy of the GNU General Public License
 //  along with EverOrg.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
 import Foundation
 
-let everOrg = EverOrg()
+struct ConsoleIO {
 
-if CommandLine.argc < 2 {
-  print("Commandline \(CommandLine.arguments)")
-} else {
-  everOrg.staticMode()
+  func getOption(_ option: String) -> (option:OptionType, value: String) {
+    return (OptionType(value: option), option)
+  }
+
+  static func printUsage() {
+    let executableName = (CommandLine.arguments[0] as NSString).lastPathComponent
+
+    print("usage:")
+    print("\(executableName) -a string1 string2")
+    print("or")
+    print("\(executableName) -p string")
+    print("or")
+    print("\(executableName) -h to show usage information")
+    print("Type \(executableName) without an option to enter interactive mode.")
+  }
 }
