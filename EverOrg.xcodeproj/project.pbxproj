@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		744EF0451E471E2E00DB1E81 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0441E471E2E00DB1E81 /* Source.swift */; };
 		744EF0471E471E6F00DB1E81 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0461E471E6F00DB1E81 /* Block.swift */; };
 		744EF0491E47202300DB1E81 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0481E47202300DB1E81 /* Element.swift */; };
 		744EF04D1E47220700DB1E81 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04A1E47220700DB1E81 /* ConsoleIO.swift */; };
@@ -16,6 +15,16 @@
 		744EF0521E47224900DB1E81 /* EnexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0501E47224900DB1E81 /* EnexParser.swift */; };
 		744EF0531E47224900DB1E81 /* EnmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0511E47224900DB1E81 /* EnmlParser.swift */; };
 		744EF0551E47225C00DB1E81 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0541E47225C00DB1E81 /* Note.swift */; };
+		744EF05D1E472D4D00DB1E81 /* EverOrgTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF05C1E472D4D00DB1E81 /* EverOrgTests.swift */; };
+		744EF0641E477AB000DB1E81 /* EverNoteExportTestData.enex in Resources */ = {isa = PBXBuildFile; fileRef = 744EF0631E477AB000DB1E81 /* EverNoteExportTestData.enex */; };
+		744EF0651E47820200DB1E81 /* EnexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0501E47224900DB1E81 /* EnexParser.swift */; };
+		744EF0661E47824E00DB1E81 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0541E47225C00DB1E81 /* Note.swift */; };
+		744EF0671E47825D00DB1E81 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0461E471E6F00DB1E81 /* Block.swift */; };
+		744EF0681E47825D00DB1E81 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0481E47202300DB1E81 /* Element.swift */; };
+		744EF06A1E47825D00DB1E81 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04A1E47220700DB1E81 /* ConsoleIO.swift */; };
+		744EF06B1E47825D00DB1E81 /* EverOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04B1E47220700DB1E81 /* EverOrg.swift */; };
+		744EF06C1E47825D00DB1E81 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04C1E47220700DB1E81 /* main.swift */; };
+		744EF06D1E47825D00DB1E81 /* EnmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0511E47224900DB1E81 /* EnmlParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,7 +41,6 @@
 
 /* Begin PBXFileReference section */
 		744EF02B1E44FCA700DB1E81 /* EverOrg */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EverOrg; sourceTree = BUILT_PRODUCTS_DIR; };
-		744EF0441E471E2E00DB1E81 /* Source.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Source.swift; path = Model/Source.swift; sourceTree = "<group>"; };
 		744EF0461E471E6F00DB1E81 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Block.swift; path = Model/Block.swift; sourceTree = "<group>"; };
 		744EF0481E47202300DB1E81 /* Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Element.swift; path = Model/Element.swift; sourceTree = "<group>"; };
 		744EF04A1E47220700DB1E81 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConsoleIO.swift; path = main/ConsoleIO.swift; sourceTree = "<group>"; };
@@ -41,10 +49,21 @@
 		744EF0501E47224900DB1E81 /* EnexParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnexParser.swift; path = Parser/EnexParser.swift; sourceTree = "<group>"; };
 		744EF0511E47224900DB1E81 /* EnmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnmlParser.swift; path = Parser/EnmlParser.swift; sourceTree = "<group>"; };
 		744EF0541E47225C00DB1E81 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Note.swift; path = Model/Note.swift; sourceTree = "<group>"; };
+		744EF05A1E472D4D00DB1E81 /* EverOrgTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EverOrgTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		744EF05C1E472D4D00DB1E81 /* EverOrgTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverOrgTests.swift; sourceTree = "<group>"; };
+		744EF05E1E472D4D00DB1E81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		744EF0631E477AB000DB1E81 /* EverNoteExportTestData.enex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = EverNoteExportTestData.enex; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		744EF0281E44FCA700DB1E81 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		744EF0571E472D4D00DB1E81 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -58,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				744EF02D1E44FCA700DB1E81 /* EverOrg */,
+				744EF05B1E472D4D00DB1E81 /* EverOrgTests */,
 				744EF02C1E44FCA700DB1E81 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -66,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				744EF02B1E44FCA700DB1E81 /* EverOrg */,
+				744EF05A1E472D4D00DB1E81 /* EverOrgTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,9 +126,26 @@
 				744EF0541E47225C00DB1E81 /* Note.swift */,
 				744EF0461E471E6F00DB1E81 /* Block.swift */,
 				744EF0481E47202300DB1E81 /* Element.swift */,
-				744EF0441E471E2E00DB1E81 /* Source.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		744EF05B1E472D4D00DB1E81 /* EverOrgTests */ = {
+			isa = PBXGroup;
+			children = (
+				744EF0621E477AB000DB1E81 /* Resources */,
+				744EF05C1E472D4D00DB1E81 /* EverOrgTests.swift */,
+				744EF05E1E472D4D00DB1E81 /* Info.plist */,
+			);
+			path = EverOrgTests;
+			sourceTree = "<group>";
+		};
+		744EF0621E477AB000DB1E81 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				744EF0631E477AB000DB1E81 /* EverNoteExportTestData.enex */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,6 +168,23 @@
 			productReference = 744EF02B1E44FCA700DB1E81 /* EverOrg */;
 			productType = "com.apple.product-type.tool";
 		};
+		744EF0591E472D4D00DB1E81 /* EverOrgTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 744EF05F1E472D4D00DB1E81 /* Build configuration list for PBXNativeTarget "EverOrgTests" */;
+			buildPhases = (
+				744EF0561E472D4D00DB1E81 /* Sources */,
+				744EF0571E472D4D00DB1E81 /* Frameworks */,
+				744EF0581E472D4D00DB1E81 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EverOrgTests;
+			productName = EverOrgTests;
+			productReference = 744EF05A1E472D4D00DB1E81 /* EverOrgTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -142,6 +197,11 @@
 				TargetAttributes = {
 					744EF02A1E44FCA700DB1E81 = {
 						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+					744EF0591E472D4D00DB1E81 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 9VWR9JYXC6;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -159,9 +219,21 @@
 			projectRoot = "";
 			targets = (
 				744EF02A1E44FCA700DB1E81 /* EverOrg */,
+				744EF0591E472D4D00DB1E81 /* EverOrgTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		744EF0581E472D4D00DB1E81 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				744EF0641E477AB000DB1E81 /* EverNoteExportTestData.enex in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		744EF0271E44FCA700DB1E81 /* Sources */ = {
@@ -176,7 +248,22 @@
 				744EF0551E47225C00DB1E81 /* Note.swift in Sources */,
 				744EF0521E47224900DB1E81 /* EnexParser.swift in Sources */,
 				744EF04D1E47220700DB1E81 /* ConsoleIO.swift in Sources */,
-				744EF0451E471E2E00DB1E81 /* Source.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		744EF0561E472D4D00DB1E81 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				744EF0651E47820200DB1E81 /* EnexParser.swift in Sources */,
+				744EF06A1E47825D00DB1E81 /* ConsoleIO.swift in Sources */,
+				744EF06C1E47825D00DB1E81 /* main.swift in Sources */,
+				744EF06B1E47825D00DB1E81 /* EverOrg.swift in Sources */,
+				744EF0671E47825D00DB1E81 /* Block.swift in Sources */,
+				744EF05D1E472D4D00DB1E81 /* EverOrgTests.swift in Sources */,
+				744EF0661E47824E00DB1E81 /* Note.swift in Sources */,
+				744EF06D1E47825D00DB1E81 /* EnmlParser.swift in Sources */,
+				744EF0681E47825D00DB1E81 /* Element.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +361,7 @@
 		744EF0331E44FCA700DB1E81 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEFINES_MODULE = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -282,7 +370,38 @@
 		744EF0341E44FCA700DB1E81 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEFINES_MODULE = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		744EF0601E472D4D00DB1E81 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = 9VWR9JYXC6;
+				INFOPLIST_FILE = EverOrgTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.schnuddelhuddel.EverOrgTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		744EF0611E472D4D00DB1E81 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = 9VWR9JYXC6;
+				INFOPLIST_FILE = EverOrgTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.schnuddelhuddel.EverOrgTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -304,6 +423,14 @@
 			buildConfigurations = (
 				744EF0331E44FCA700DB1E81 /* Debug */,
 				744EF0341E44FCA700DB1E81 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		744EF05F1E472D4D00DB1E81 /* Build configuration list for PBXNativeTarget "EverOrgTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				744EF0601E472D4D00DB1E81 /* Debug */,
+				744EF0611E472D4D00DB1E81 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

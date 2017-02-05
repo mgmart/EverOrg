@@ -62,11 +62,14 @@ class EnexParser: NSObject, XMLParserDelegate {
     case Classifications = "classifications"
   }
 
+  var notes: [Note] = []
+  var note:Note?
+
   var topElement:[Evernote] = []
   var element: Evernote?
   var elementContent:String?
 
-  override init() {
+  public override init() {
     print("Init")
     super.init()
   }
@@ -74,11 +77,11 @@ class EnexParser: NSObject, XMLParserDelegate {
   // MARK: Parser Delegate
 
   func parserDidStartDocument(_ parser: XMLParser) {
-    // print("start Document")
+    print("start Document")
   }
 
   func parserDidEndDocument(_ parser: XMLParser) {
-    // print("End Document: \(notes.count)")
+    print("End Document: \(notes.count)")
     for note in notes {
       print(note.title)
     }
@@ -201,17 +204,17 @@ class EnexParser: NSObject, XMLParserDelegate {
           parser.abortParsing()
           return
         }
+      case .Tag:
+        guard addTag() else {
+          parser.abortParsing()
+          return
+        }
       case .Mime:
         print("Mime: \(elementContent) for \(topElement.last)")
       case .Width:
         print("Width: \(elementContent) for \(topElement.last)")
       case .Height:
         print("Height: \(elementContent)for \(topElement.last)")
-//      case .Duration:
-//        print("Duration: \(elementContent)")
-//      case .Timestamp:
-//          print("Timestamp: \(elementContent)")
-
       case .Data:
         print("Data")
         break //print("Data: \(elementContent)")
@@ -354,10 +357,9 @@ class EnexParser: NSObject, XMLParserDelegate {
   }
 
   func addSource() -> Bool {
-    if let currentElement = elementContent, note != nil,
-      let source = Source(rawValue: currentElement) {
+    if let currentElement = elementContent, note != nil {
 
-      note?.attributes.source = source
+      note?.attributes.source = currentElement
       return true
     }
     print("Error: Could not add source \(elementContent)")
@@ -415,6 +417,14 @@ class EnexParser: NSObject, XMLParserDelegate {
       return true
     }
     print("Error: Could not add height \(elementContent)")
+    return false
+  }
+
+  func addTag() -> Bool {
+    if let currentElement = elementContent, note != nil {
+      note?.tags.append(currentElement)
+      return true
+    }
     return false
   }
 

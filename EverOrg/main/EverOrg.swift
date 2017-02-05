@@ -36,9 +36,6 @@ enum OptionType: String {
   }
 }
 
-var notes: [Note] = []
-var note:Note?
-
 struct EverOrg {
 
   let consoleIO = ConsoleIO()

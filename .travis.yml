@@ -2,7 +2,7 @@ language: objective-c
 osx_image: xcode8.2
 
 script:
-- xcodebuild clean build  -project EverOrg.xcodeproj -scheme EverOrg
+- xcodebuild clean build test -project EverOrg.xcodeproj -scheme EverOrg | xcpretty
 
 # after_success:
 # - bash <(curl -s https://codecov.io/bash)

@@ -33,7 +33,7 @@ struct Note {
     var reminderDoneTime: Date?
     var reminderTime: Date?
     var contentClass: String?
-    var source: Source?
+    var source: String?
     var sourceURL: URL?
     var applicationData: Data?
     var created: Date?
@@ -45,6 +45,7 @@ struct Note {
   var title: String
   var attributes: Attributes
   var content: [Content]
+  var tags: [String] = []
 
   init() {
     title = ""

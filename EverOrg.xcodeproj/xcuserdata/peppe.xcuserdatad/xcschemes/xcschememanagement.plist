@@ -9,10 +9,20 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>EverOrgTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>744EF02A1E44FCA700DB1E81</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>744EF0591E472D4D00DB1E81</key>
 		<dict>
 			<key>primary</key>
 			<true/>
