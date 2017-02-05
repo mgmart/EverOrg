@@ -63,28 +63,23 @@ class EnexParser: NSObject, XMLParserDelegate {
 
   var topElement:[Evernote] = []
   var element: Evernote?
-  var note: Note?
   var elementContent:String?
 
-  var allNotes: [Note]
-
   override init() {
-    allNotes = []
     print("Init")
     super.init()
-
   }
 
   // MARK: Parser Delegate
 
   func parserDidStartDocument(_ parser: XMLParser) {
-    print("start Document")
+    // print("start Document")
   }
 
   func parserDidEndDocument(_ parser: XMLParser) {
-    print("End Document: \(allNotes.count)")
-    for locNote in allNotes {
-      print(locNote.title)
+    // print("End Document: \(notes.count)")
+    for note in notes {
+      print(note.title)
     }
   }
 
@@ -93,6 +88,22 @@ class EnexParser: NSObject, XMLParserDelegate {
       print("Start Element not processed: \(elementName)")
       return
     }
+
+
+    for (rawkey, strValue) in attributeDict {
+      print("Key: \(rawkey) Value \(strValue)")
+      //      let value = strValue
+      //      if let key = Coordinate(rawValue: rawkey) {
+      //        switch key {
+      //        case .Latitude:
+      //          coordinateBuffer.latitude = Double(value)!
+      //        // trackPoint.coord.latitude = Double(value)!
+      //        case .Longitude:
+      //          coordinateBuffer.longitude = Double(value)!
+      //          // trackPoint.coord.longitude = Double(value)!
+      //        }
+    }
+
 
     // Put current element on stack
     if let top = Evernote(rawValue: elementName) {
@@ -117,7 +128,7 @@ class EnexParser: NSObject, XMLParserDelegate {
 
   func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     guard let _ = Evernote(rawValue: elementName) else {
-      print("End Element: \(elementName)")
+      print("End Element not processed: \(elementName)")
       return
     }
 
@@ -131,7 +142,7 @@ class EnexParser: NSObject, XMLParserDelegate {
       switch currentElement {
       case .Note:
         if let currentNote = note {
-          allNotes.append(currentNote)
+          notes.append(currentNote)
           note = nil
         }
       case .Title:
@@ -220,12 +231,12 @@ class EnexParser: NSObject, XMLParserDelegate {
   }
 
   func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
-    print("CDATA for: \(topElement.last)")
+    print("CDATA begins for: \(topElement.last)")
 
     // Not sure if we should process recognition information
     if topElement.last != Evernote.Recoginition {
 
-      // XMLParser is not reentrant capable. Need to dispatch async and wait immeadeatly
+      // XMLParser is not reentrant capable. Need to dispatch async and wait immediately
       let group = DispatchGroup()
       group.enter()
       let myqueue = DispatchQueue(label: "de.schnuddelhuddel.myqueue", qos: .background,  target: nil)
@@ -238,6 +249,9 @@ class EnexParser: NSObject, XMLParserDelegate {
       }
       group.wait()
     }
+
+    print("CDATA ends for: \(topElement.last)")
+
   }
 
   func parser(_ parser: XMLParser, foundIgnorableWhitespace whitespaceString: String) {
@@ -249,6 +263,16 @@ class EnexParser: NSObject, XMLParserDelegate {
 
 
   // MARK: Property Methods
+
+  func addElement(_ element: Any) {
+    if let currentElement = elementContent,
+      note != nil {
+
+      
+
+    }
+  }
+
 
   func createNewNote() -> Bool {
     if note == nil {
@@ -263,6 +287,7 @@ class EnexParser: NSObject, XMLParserDelegate {
     if note != nil {
       if let content = elementContent {
         note?.title = content
+        print("Note Title: \(note?.title)")
       } else {
         note?.title = "[No Title found for Note]"
       }

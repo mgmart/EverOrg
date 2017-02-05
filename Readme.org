@@ -1,5 +1,7 @@
 * EverOrg
 
+  [[https://api.travis-ci.org/mgmart/EverOrg.png]]
+
 ** Objective 
 
 *** Migrate all content from Evernote to Org mode
@@ -13,7 +15,7 @@
     [[https://github.com/MobileOrg/mobileorg.next][MobileOrg v2]], it's time to migrate my stuff fully over to Org
     mode.
 
-    One the reasons of using Evernote was the possibilty to export all
+    One of the reasons of using Evernote was the possibilty to export all
     of my content into xml. This project uses the Evernote
     backup-files to generate Org mode files. 
 

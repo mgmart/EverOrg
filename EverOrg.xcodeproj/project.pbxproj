@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		744EF02F1E44FCA700DB1E81 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF02E1E44FCA700DB1E81 /* main.swift */; };
-		744EF0361E44FD0A00DB1E81 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0351E44FD0A00DB1E81 /* ConsoleIO.swift */; };
-		744EF0381E44FF3A00DB1E81 /* EverOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0371E44FF3A00DB1E81 /* EverOrg.swift */; };
-		744EF03A1E4509DB00DB1E81 /* EnexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0391E4509DB00DB1E81 /* EnexParser.swift */; };
-		744EF03C1E45196A00DB1E81 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF03B1E45196A00DB1E81 /* Note.swift */; };
-		744EF03E1E45E4B200DB1E81 /* EnmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF03D1E45E4B200DB1E81 /* EnmlParser.swift */; };
+		744EF0451E471E2E00DB1E81 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0441E471E2E00DB1E81 /* Source.swift */; };
+		744EF0471E471E6F00DB1E81 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0461E471E6F00DB1E81 /* Block.swift */; };
+		744EF0491E47202300DB1E81 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0481E47202300DB1E81 /* Element.swift */; };
+		744EF04D1E47220700DB1E81 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04A1E47220700DB1E81 /* ConsoleIO.swift */; };
+		744EF04E1E47220700DB1E81 /* EverOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04B1E47220700DB1E81 /* EverOrg.swift */; };
+		744EF04F1E47220700DB1E81 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04C1E47220700DB1E81 /* main.swift */; };
+		744EF0521E47224900DB1E81 /* EnexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0501E47224900DB1E81 /* EnexParser.swift */; };
+		744EF0531E47224900DB1E81 /* EnmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0511E47224900DB1E81 /* EnmlParser.swift */; };
+		744EF0551E47225C00DB1E81 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0541E47225C00DB1E81 /* Note.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,12 +32,15 @@
 
 /* Begin PBXFileReference section */
 		744EF02B1E44FCA700DB1E81 /* EverOrg */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EverOrg; sourceTree = BUILT_PRODUCTS_DIR; };
-		744EF02E1E44FCA700DB1E81 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		744EF0351E44FD0A00DB1E81 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleIO.swift; sourceTree = "<group>"; };
-		744EF0371E44FF3A00DB1E81 /* EverOrg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EverOrg.swift; sourceTree = "<group>"; };
-		744EF0391E4509DB00DB1E81 /* EnexParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnexParser.swift; sourceTree = "<group>"; };
-		744EF03B1E45196A00DB1E81 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
-		744EF03D1E45E4B200DB1E81 /* EnmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnmlParser.swift; sourceTree = "<group>"; };
+		744EF0441E471E2E00DB1E81 /* Source.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Source.swift; path = Model/Source.swift; sourceTree = "<group>"; };
+		744EF0461E471E6F00DB1E81 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Block.swift; path = Model/Block.swift; sourceTree = "<group>"; };
+		744EF0481E47202300DB1E81 /* Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Element.swift; path = Model/Element.swift; sourceTree = "<group>"; };
+		744EF04A1E47220700DB1E81 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConsoleIO.swift; path = main/ConsoleIO.swift; sourceTree = "<group>"; };
+		744EF04B1E47220700DB1E81 /* EverOrg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EverOrg.swift; path = main/EverOrg.swift; sourceTree = "<group>"; };
+		744EF04C1E47220700DB1E81 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = main/main.swift; sourceTree = "<group>"; };
+		744EF0501E47224900DB1E81 /* EnexParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnexParser.swift; path = Parser/EnexParser.swift; sourceTree = "<group>"; };
+		744EF0511E47224900DB1E81 /* EnmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnmlParser.swift; path = Parser/EnmlParser.swift; sourceTree = "<group>"; };
+		744EF0541E47225C00DB1E81 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Note.swift; path = Model/Note.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,14 +73,41 @@
 		744EF02D1E44FCA700DB1E81 /* EverOrg */ = {
 			isa = PBXGroup;
 			children = (
-				744EF03B1E45196A00DB1E81 /* Note.swift */,
-				744EF02E1E44FCA700DB1E81 /* main.swift */,
-				744EF0351E44FD0A00DB1E81 /* ConsoleIO.swift */,
-				744EF0371E44FF3A00DB1E81 /* EverOrg.swift */,
-				744EF03D1E45E4B200DB1E81 /* EnmlParser.swift */,
-				744EF0391E4509DB00DB1E81 /* EnexParser.swift */,
+				744EF0431E471DF900DB1E81 /* Model */,
+				744EF0421E471DEE00DB1E81 /* main */,
+				744EF0411E471DD700DB1E81 /* Parser */,
 			);
 			path = EverOrg;
+			sourceTree = "<group>";
+		};
+		744EF0411E471DD700DB1E81 /* Parser */ = {
+			isa = PBXGroup;
+			children = (
+				744EF0501E47224900DB1E81 /* EnexParser.swift */,
+				744EF0511E47224900DB1E81 /* EnmlParser.swift */,
+			);
+			name = Parser;
+			sourceTree = "<group>";
+		};
+		744EF0421E471DEE00DB1E81 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				744EF04A1E47220700DB1E81 /* ConsoleIO.swift */,
+				744EF04B1E47220700DB1E81 /* EverOrg.swift */,
+				744EF04C1E47220700DB1E81 /* main.swift */,
+			);
+			name = main;
+			sourceTree = "<group>";
+		};
+		744EF0431E471DF900DB1E81 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				744EF0541E47225C00DB1E81 /* Note.swift */,
+				744EF0461E471E6F00DB1E81 /* Block.swift */,
+				744EF0481E47202300DB1E81 /* Element.swift */,
+				744EF0441E471E2E00DB1E81 /* Source.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,12 +168,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				744EF03E1E45E4B200DB1E81 /* EnmlParser.swift in Sources */,
-				744EF03C1E45196A00DB1E81 /* Note.swift in Sources */,
-				744EF03A1E4509DB00DB1E81 /* EnexParser.swift in Sources */,
-				744EF0381E44FF3A00DB1E81 /* EverOrg.swift in Sources */,
-				744EF02F1E44FCA700DB1E81 /* main.swift in Sources */,
-				744EF0361E44FD0A00DB1E81 /* ConsoleIO.swift in Sources */,
+				744EF04E1E47220700DB1E81 /* EverOrg.swift in Sources */,
+				744EF0531E47224900DB1E81 /* EnmlParser.swift in Sources */,
+				744EF04F1E47220700DB1E81 /* main.swift in Sources */,
+				744EF0471E471E6F00DB1E81 /* Block.swift in Sources */,
+				744EF0491E47202300DB1E81 /* Element.swift in Sources */,
+				744EF0551E47225C00DB1E81 /* Note.swift in Sources */,
+				744EF0521E47224900DB1E81 /* EnexParser.swift in Sources */,
+				744EF04D1E47220700DB1E81 /* ConsoleIO.swift in Sources */,
+				744EF0451E471E2E00DB1E81 /* Source.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

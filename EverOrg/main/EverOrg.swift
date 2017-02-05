@@ -37,7 +37,7 @@ enum OptionType: String {
 }
 
 var notes: [Note] = []
-var resources: [Resource] = []
+var note:Note?
 
 struct EverOrg {
 

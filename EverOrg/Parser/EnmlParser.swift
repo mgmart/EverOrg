@@ -22,20 +22,46 @@
 
 import Foundation
 
+struct Content {
+  var data: Data?
+  var mime: String?
+  var width: Int?
+  var height: Int?
+  var duration: Int?
+  // var recogniton: <- ignore that for the time being
+  var alternateData: Data?
+  var body: [String]
+}
+
 class EnmlParser: NSObject, XMLParserDelegate {
 
   var elementContent: String?
+  var content: Content?
 
   func parserDidStartDocument(_ parser: XMLParser) {
-    print("Start Document")
+    // print("Start Document")
   }
   func parserDidEndDocument(_ parser: XMLParser) {
-    print("End Document")
+    // print("End Document")
   }
 
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
     print("Element -> \(elementName)")
-  }
+    for (rawkey, strValue) in attributeDict {
+      print("Key: \(rawkey) Value \(strValue)")
+//      let value = strValue
+//      if let key = Coordinate(rawValue: rawkey) {
+//        switch key {
+//        case .Latitude:
+//          coordinateBuffer.latitude = Double(value)!
+//        // trackPoint.coord.latitude = Double(value)!
+//        case .Longitude:
+//          coordinateBuffer.longitude = Double(value)!
+//          // trackPoint.coord.longitude = Double(value)!
+//        }
+      }
+    }
+
 
   func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     print("Element -> \(elementName)")
