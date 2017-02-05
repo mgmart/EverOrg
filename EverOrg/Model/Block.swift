@@ -27,7 +27,12 @@ enum BlockType {
   case Heading
   case Figure
   case List
-  case Code
+}
+
+enum ListType {
+  case Numbered
+  case Plain
+  case Checkbox
 }
 
 protocol Block {
@@ -36,6 +41,15 @@ protocol Block {
 
 struct Paragraph: Block {
   var type = BlockType.Paragraph
+  var elements: [Element] // Text, Code, Markup
+}
 
-  
+struct Heading: Block {
+  var type = BlockType.Heading
+  var text:String
+}
+
+struct Figure {
+  var type = BlockType.Figure
+  var element:Element // Image or Attachment
 }

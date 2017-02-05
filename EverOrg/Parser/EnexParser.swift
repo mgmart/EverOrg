@@ -21,6 +21,7 @@
 //  along with EverOrg.  If not, see <http://www.gnu.org/licenses/>.
 
 import Foundation
+
 class EnexParser: NSObject, XMLParserDelegate {
 
   enum Evernote: String {
@@ -263,16 +264,6 @@ class EnexParser: NSObject, XMLParserDelegate {
 
 
   // MARK: Property Methods
-
-  func addElement(_ element: Any) {
-    if let currentElement = elementContent,
-      note != nil {
-
-      
-
-    }
-  }
-
 
   func createNewNote() -> Bool {
     if note == nil {

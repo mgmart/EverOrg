@@ -26,7 +26,6 @@ enum ElementType {
   case Text
   case Strong
   case Emphasis
-  case Code
   case Links
   case Image
   case Attachment
