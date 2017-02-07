@@ -64,6 +64,7 @@ class EnexParser: NSObject, XMLParserDelegate {
 
   var notes: [Note] = []
   var note:Note?
+  // var content: Content?
 
   var topElement:[Evernote] = []
   var element: Evernote?
@@ -95,17 +96,7 @@ class EnexParser: NSObject, XMLParserDelegate {
 
 
     for (rawkey, strValue) in attributeDict {
-      print("Key: \(rawkey) Value \(strValue)")
-      //      let value = strValue
-      //      if let key = Coordinate(rawValue: rawkey) {
-      //        switch key {
-      //        case .Latitude:
-      //          coordinateBuffer.latitude = Double(value)!
-      //        // trackPoint.coord.latitude = Double(value)!
-      //        case .Longitude:
-      //          coordinateBuffer.longitude = Double(value)!
-      //          // trackPoint.coord.longitude = Double(value)!
-      //        }
+      print("Key: \(rawkey), Value: \(strValue)")
     }
 
 
@@ -216,8 +207,10 @@ class EnexParser: NSObject, XMLParserDelegate {
       case .Height:
         print("Height: \(elementContent)for \(topElement.last)")
       case .Data:
-        print("Data")
-        break //print("Data: \(elementContent)")
+        guard addData() else {
+          parser.abortParsing()
+          return
+        }
       case .Content:
         break
       default:
@@ -235,7 +228,7 @@ class EnexParser: NSObject, XMLParserDelegate {
   }
 
   func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
-    print("CDATA begins for: \(topElement.last)")
+    // print("CDATA begins for: \(topElement.last)")
 
     // Not sure if we should process recognition information
     if topElement.last != Evernote.Recoginition {
@@ -249,13 +242,12 @@ class EnexParser: NSObject, XMLParserDelegate {
         let xmlParser = XMLParser(data: CDATABlock)
         xmlParser.delegate = enmlParser
         xmlParser.parse()
+        self.note?.content = enmlParser.content
         group.leave()
       }
       group.wait()
     }
-
-    print("CDATA ends for: \(topElement.last)")
-
+    // print("CDATA ends for: \(topElement.last)")
   }
 
   func parser(_ parser: XMLParser, foundIgnorableWhitespace whitespaceString: String) {
@@ -265,176 +257,5 @@ class EnexParser: NSObject, XMLParserDelegate {
     print("Parse Error")
   }
 
-
-  // MARK: Property Methods
-
-  func createNewNote() -> Bool {
-    if note == nil {
-      note = Note()
-      return true
-    }
-    print("Error: Trying to create a note whilst we're processing one already")
-    return false
-  }
-
-  func addTitle() -> Bool {
-    if note != nil {
-      if let content = elementContent {
-        note?.title = content
-        print("Note Title: \(note?.title)")
-      } else {
-        note?.title = "[No Title found for Note]"
-      }
-      return true
-    }
-    print("Error: Trying to add a title to a nonexisting note")
-    return false
-  }
-
-  func addCreated() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let date = time(from: currentElement) {
-      note?.attributes.created = date
-      return true
-    } else {
-      print("Error: Could not add created date")
-      return false
-    }
-  }
-
-  func addUpdated() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let date = time(from: currentElement) {
-      note?.attributes.updated = date
-      return true
-    }
-    print("Error: Could not add updated date")
-    return false
-  }
-
-  func addLatitude() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let latitude = Double(currentElement) {
-      note?.attributes.latitude = latitude
-      return true
-    }
-    print("Error: Could not add latitude")
-    return false
-  }
-
-  func addLongitude() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let longitude = Double(currentElement) {
-      note?.attributes.longitude = longitude
-      return true
-    }
-    print("Error: Could not add longitude")
-    return false
-  }
-
-  func addAltitude() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let altitude = Double(currentElement) {
-      note?.attributes.altitude = altitude
-      return true
-    }
-    print("Error: Could not add altitude")
-    return false
-  }
-
-  func addAuthor() -> Bool {
-    if let currentElement = elementContent, note != nil {
-      note?.attributes.author = currentElement
-      return true
-    }
-    print("Error: Could not add author")
-    return false
-  }
-
-  func addSource() -> Bool {
-    if let currentElement = elementContent, note != nil {
-
-      note?.attributes.source = currentElement
-      return true
-    }
-    print("Error: Could not add source \(elementContent)")
-    return false
-  }
-
-  func addReminderOrder() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let order = Int(currentElement) {
-      note?.attributes.reminderOrder = order
-      return true
-    }
-    print("Error: Could not add reminder order \(elementContent)")
-    return false
-  }
-
-  func addNoteAttributes() -> Bool {
-    if let currentElement = elementContent, note != nil {
-      note?.attributes.noteAttributes = currentElement
-      return true
-    }
-    print("Error: Could not add note attr \(elementContent)")
-    return false
-  }
-
-  func addSourceURL() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let url = URL(string: currentElement) {
-      note?.attributes.sourceURL = url
-      return true
-    }
-    print("Error: Could not add source url")
-    return false
-  }
-
-  func addWith() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let width = Int(currentElement) {
-      print("Width = \(width) for \(topElement)")
-      //      note?.attributes. = width
-      return true
-    }
-    print("Error: Could not add width \(elementContent)")
-    return false
-  }
-
-  func addHeight() -> Bool {
-    if let currentElement = elementContent,
-      note != nil,
-      let order = Int(currentElement) {
-      note?.attributes.reminderOrder = order
-      return true
-    }
-    print("Error: Could not add height \(elementContent)")
-    return false
-  }
-
-  func addTag() -> Bool {
-    if let currentElement = elementContent, note != nil {
-      note?.tags.append(currentElement)
-      return true
-    }
-    return false
-  }
-
-  func time(from string: String) -> Date? {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss'Z'"
-    if let date = dateFormatter.date(from: string) {
-      return date
-    } else {
-      return nil
-    }
-  }
 }
+

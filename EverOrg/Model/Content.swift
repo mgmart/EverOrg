@@ -1,8 +1,8 @@
 //
-//  Element.swift
+//  Content.swift
 //  EverOrg
 //
-//  Created by Mario Martelli on 05.02.17.
+//  Created by Mario Martelli on 06.02.17.
 //  Copyright © 2017 Mario Martelli. All rights reserved.
 //
 //  This file is part of EverOrg.
@@ -22,33 +22,6 @@
 
 import Foundation
 
-enum ElementType {
-  case Text
-  case Strong
-  case Emphasis
-  case Links
-  case Image
-  case Attachment
+struct Content {
+  var body: [Block] = []
 }
-
-protocol Element {
-}
-
-struct Image: Element {
-  var hash = ""
-}
-
-struct Attachment: Element {
-  var hash: String
-  var data: Data?
-
-  init(hash: String, data: Data?) {
-    self.hash = hash
-    self.data = data
-  }
-
-  init(hash: String) {
-    self.init(hash: hash, data: nil)
-  }
-}
-

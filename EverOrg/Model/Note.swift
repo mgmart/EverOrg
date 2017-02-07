@@ -44,12 +44,11 @@ struct Note {
 
   var title: String
   var attributes: Attributes
-  var content: [Content]
+  var content: Content?
   var tags: [String] = []
 
   init() {
     title = ""
     attributes = Attributes()
-    content = []
   }
 }

@@ -36,20 +36,16 @@ enum ListType {
 }
 
 protocol Block {
-  var type: BlockType {get set}
 }
 
 struct Paragraph: Block {
-  var type = BlockType.Paragraph
   var elements: [Element] // Text, Code, Markup
 }
 
 struct Heading: Block {
-  var type = BlockType.Heading
   var text:String
 }
 
-struct Figure {
-  var type = BlockType.Figure
+struct Figure: Block {
   var element:Element // Image or Attachment
 }

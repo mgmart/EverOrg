@@ -5,6 +5,20 @@
 //  Created by Mario Martelli on 05.02.17.
 //  Copyright © 2017 Mario Martelli. All rights reserved.
 //
+//  This file is part of EverOrg.
+//
+//  Foobar is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  EverOrg is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with EverOrg.  If not, see <http://www.gnu.org/licenses/>.
 
 import XCTest
 
@@ -38,6 +52,17 @@ class EverOrgTests: XCTestCase {
     if let tags = enexParser.notes.first?.tags {
       XCTAssertEqual(tags.count, 4)
       XCTAssertTrue(tags.contains("tags"))
+    } else {
+      XCTFail()
+    }
+  }
+
+  func testAttachment() {
+    if let figure = enexParser.notes.last?.content?.body.first as? Figure,
+      let attachment = figure.element as? Attachment {
+
+      XCTAssertEqual(attachment.hash, attachment.data?.hexString)
+
     } else {
       XCTFail()
     }
