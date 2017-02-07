@@ -33,10 +33,14 @@ class EnmlParser: NSObject, XMLParserDelegate {
   enum MediaItemType: String {
     case Pdf = "application/pdf"
     case Jpeg = "image/jpeg"
+    case Png = "image/png"
   }
 
   var elementContent: String?
   var content: Content?
+
+  var width: Int?
+  var height: Int?
 
   func parserDidStartDocument(_ parser: XMLParser) {
     content = Content()

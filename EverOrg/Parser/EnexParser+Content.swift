@@ -31,10 +31,19 @@ extension EnexParser {
     if let body = note?.content?.body,
       let data = Data(base64Encoded: elementContent!, options: .ignoreUnknownCharacters) {
       for (index, block) in body.enumerated() {
-        if let figure = block as? Figure,
-          let attachment = figure.element as? Attachment{
-          if attachment.hash == data.hexString {
-            note?.content?.body[index] = Figure(element: Attachment(hash: attachment.hash, data: data))
+
+        // FIXME: That could be done much nicer
+        if let figure = block as? Figure {
+          if let attachment = figure.element as? Attachment{
+            if attachment.hash == data.hexString {
+              note?.content?.body[index] = Figure(element: Attachment(hash: attachment.hash, data: data))
+            }
+          }
+          else if let image = figure.element as? Image {
+            if image.hash == data.hexString {
+              note?.content?.body[index] = Figure(element: Image(hash: image.hash, width: image.width, heigth: image.heigth, alt: image.alt, data: data))
+
+            }
           }
         }
       }

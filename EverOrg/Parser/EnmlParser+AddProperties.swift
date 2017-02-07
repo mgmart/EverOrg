@@ -25,32 +25,53 @@ import Foundation
 extension EnmlParser {
 
   func addMedia(_ attributes: Dictionary<String, String>) -> Bool {
+
     var hash: String?
     var type: String?
+    var height: Int?
+    var width: Int?
+    var alt: String?
+
     for (rawkey, strValue) in attributes {
       switch rawkey {
       case "hash":
         hash = strValue
       case "type":
         type = strValue
+      case "height":
+        height = Int(strValue)
+      case "width":
+        width = Int(strValue)
+      case "alt":
+        alt = strValue
       default:
+        // align, alt, longdesc, border, hspace, vspace, usemap
+        // do not have any correspondent attribute in Org mode
+        // at the moment
         print("unprocessed key \(rawkey) with value \(strValue)")
+        break
       }
     }
 
-    if let mediaHash = hash, let mediaType = type {
+    if let mediaHash = hash, let mType = type,
+      let mediaType = MediaItemType(rawValue: mType){
+
       switch mediaType {
-      case "application/pdf":
-        print("Hash = \(hash)")
+      case .Pdf:
         let element = Attachment(hash: mediaHash)
         let figure = Figure(element: element)
         content?.body.append(figure)
-        return true
-      default:
-        print("media not processed: \(mediaType)")
-        return false
+      case .Jpeg, .Png:
+        width = width != nil ? width : 0
+        height = height != nil ? height : 0
+        let element = Image(hash: mediaHash, width: width!, heigth: height!, alt: alt, data: nil)
+          let figure = Figure(element: element)
+          content?.body.append(figure)
       }
+      return true
+    } else {
+      print("media not processed: \(type)")
+      return false
     }
-    return false
   }
 }

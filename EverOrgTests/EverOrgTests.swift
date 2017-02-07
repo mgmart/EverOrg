@@ -39,12 +39,9 @@ class EverOrgTests: XCTestCase {
     xmlParser?.delegate = enexParser
     xmlParser?.shouldResolveExternalEntities = true
     xmlParser?.parse()
-
-    // Put setup code here. This method is called before the invocation of each test method in the class.
   }
 
   override func tearDown() {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     super.tearDown()
   }
 
@@ -52,9 +49,7 @@ class EverOrgTests: XCTestCase {
     if let tags = enexParser.notes.first?.tags {
       XCTAssertEqual(tags.count, 4)
       XCTAssertTrue(tags.contains("tags"))
-    } else {
-      XCTFail()
-    }
+    } else { XCTFail() }
   }
 
   func testAttachment() {
@@ -63,8 +58,17 @@ class EverOrgTests: XCTestCase {
 
       XCTAssertEqual(attachment.hash, attachment.data?.hexString)
 
-    } else {
-      XCTFail()
-    }
+    } else { XCTFail() }
+  }
+
+  func testImage() {
+    if let figure = enexParser.notes[2].content?.body.first as? Figure,
+      let image = figure.element as? Image {
+
+      XCTAssertEqual(image.hash, image.data?.hexString)
+      XCTAssertEqual(image.width, 91)
+      XCTAssertEqual(image.alt, "https://api.travis-ci.org/mgmart/EverOrg.png")
+
+    } else { XCTFail() }
   }
 }

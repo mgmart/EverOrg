@@ -34,11 +34,20 @@ enum ElementType {
 protocol Element {
 }
 
-struct Image: Element {
-  var hash = ""
+protocol Media: Element {
+  var hash: String {get set}
+  var data: Data? {get set}
 }
 
-struct Attachment: Element {
+struct Image: Media {
+  var hash: String
+  var width: Int
+  var heigth: Int
+  var alt: String?
+  var data: Data?
+}
+
+struct Attachment: Media {
   var hash: String
   var data: Data?
 
