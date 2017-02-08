@@ -94,11 +94,9 @@ class EnexParser: NSObject, XMLParserDelegate {
       return
     }
 
-
-    for (rawkey, strValue) in attributeDict {
-      print("Key: \(rawkey), Value: \(strValue)")
-    }
-
+//    for (rawkey, strValue) in attributeDict {
+//      print("Key: \(rawkey), Value: \(strValue)")
+//    }
 
     // Put current element on stack
     if let top = Evernote(rawValue: elementName) {
@@ -200,12 +198,9 @@ class EnexParser: NSObject, XMLParserDelegate {
           parser.abortParsing()
           return
         }
-      case .Mime:
-        print("Mime: \(elementContent) for \(topElement.last)")
-      case .Width:
-        print("Width: \(elementContent) for \(topElement.last)")
-      case .Height:
-        print("Height: \(elementContent)for \(topElement.last)")
+      case .Mime, .Width, .Height:
+      // Already processed in CDATA block?
+        break
       case .Data:
         guard addData() else {
           parser.abortParsing()
@@ -242,7 +237,7 @@ class EnexParser: NSObject, XMLParserDelegate {
         let xmlParser = XMLParser(data: CDATABlock)
         xmlParser.delegate = enmlParser
         xmlParser.parse()
-        self.note?.content = enmlParser.content
+        self.note?.body = enmlParser.content
         group.leave()
       }
       group.wait()

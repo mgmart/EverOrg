@@ -25,6 +25,37 @@
     platform independable so that Windows users have at least the
     possibilty to use it in a VM under Linux.
 
+** Status 
+
+*** Reader [11/15]
+
+    - [X] Attachments
+    - [X] Images
+    - [X] Title
+    - [X] Geodata
+    - [X] Author
+    - [X] Plaintext
+    - [X] Tables
+    - [ ] Checklists
+    - [ ] Lists
+    - [ ] Reminders
+    - [X] Headings
+    - [X] Tags
+    - [ ] Links  
+    - [X] Created
+    - [X] Updated
+
+*** Writer [1/7]
+
+   - [ ] Headlines
+   - [ ] Properties
+   - [X] Attachments
+   - [ ] Scheduled
+   - [ ] Lists
+   - [ ] Links
+   - [ ] Tags
+
+
 ** License
 
     EverOrg is distributed under the GNU Public License

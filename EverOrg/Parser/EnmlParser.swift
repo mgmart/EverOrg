@@ -27,6 +27,17 @@ class EnmlParser: NSObject, XMLParserDelegate {
   enum Enml: String {
     case Media = "en-media"
     case Note = "en-note"
+    case Table = "table"
+    case Link = "a"
+    case Paragraph = "p"
+    case Span = "span"
+    case Headline1 = "h1"
+    case Headline2 = "h2"
+    case Headline3 = "h3"
+    case Headline4 = "h4"
+    case HorizontalLine = "hr"
+    case Division = "div"
+    case Font = "font"
   }
 
   // TODO: There must be something already defined in SDK
@@ -34,16 +45,21 @@ class EnmlParser: NSObject, XMLParserDelegate {
     case Pdf = "application/pdf"
     case Jpeg = "image/jpeg"
     case Png = "image/png"
+    case Mp4 = "audio/x-m4a"
   }
 
-  var elementContent: String?
-  var content: Content?
+  var elementContent = ""
+  var content: [Block] = []
+  var block: Block?
+  var paragraph = Paragraph(elements: [])
+  var element: Element?
 
   var width: Int?
   var height: Int?
 
+  var tableRows: [[String]]?
+
   func parserDidStartDocument(_ parser: XMLParser) {
-    content = Content()
   }
   func parserDidEndDocument(_ parser: XMLParser) {
     // print("Content: \(content)")
@@ -51,7 +67,6 @@ class EnmlParser: NSObject, XMLParserDelegate {
 
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
     if let currentElement = Enml(rawValue: elementName) {
-
       switch currentElement {
       case .Media:
         guard addMedia(attributeDict) else {
@@ -65,21 +80,80 @@ class EnmlParser: NSObject, XMLParserDelegate {
             print("unprocessed key \(rawkey) with value \(strValue)")
           }
         }
+      case .Table:
+        // Table Attributes are not usable within Org Mode
+          tableRows = [[]]
+      case .Link:
+        for (rawkey, strValue) in attributeDict {
+          if rawkey == "href" {
+            element = Link(target: URL(string: strValue), text: nil)
+          }
+          let text = Format(format: nil, text: elementContent)
+          paragraph.elements.append(text)
+          elementContent = ""
+        }
+      case .Paragraph, .Span, .Font:
+        paragraph = Paragraph(elements: [])
+      case .Headline1, .Headline2, .Headline3, .Headline4:
+        block = Heading(elements: [], level: elementName)
+      case .HorizontalLine, .Division:
+        break // FIXME: Ignored that for now.
       }
-    } else {
+    } else if FormatType(rawValue: elementName) == nil {
       print("Element -> \(elementName)")
+      for (rawkey, strValue) in attributeDict {
+        switch rawkey {
+        default:
+          print("unprocessed key \(rawkey) with value \(strValue)")
+        }
+      }
     }
   }
 
   func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-    // print("Element -> \(elementName)")
+
+    if let elementType = FormatType(rawValue: elementName) {
+      let element = Format(format: elementType, text: elementContent)
+      paragraph.elements.append(element)
+      elementContent = ""
+    }
+    else if let curElement = Enml(rawValue: elementName) {
+      switch curElement {
+      case .Link:
+        if let link = element as? Link {
+          paragraph.elements.append(Link(target: link.target, text: elementContent))
+          elementContent = ""
+        }
+      case .Paragraph, .Span, .Font:
+          paragraph.elements.append(Format(format: nil, text: elementContent))
+          content.append(paragraph)
+          elementContent = ""
+      case.Headline1, .Headline2, .Headline3, .Headline4:
+        if var headline = block as? Heading {
+          paragraph.elements.append(Format(format: nil, text: elementContent))
+          headline.elements.append(contentsOf: paragraph.elements)
+          content.append(headline)
+        }
+      default:
+        print("Unprocessed content: \(elementContent)")
+      }
+    } else {
+      print("Unprocessed ENML: \(elementName) with content \(elementContent)")
+    }
+    elementContent = ""
+    element = nil
   }
+
 
   func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
     print("ParseError")
   }
 
   func parser(_ parser: XMLParser, foundCharacters string: String) {
-    print("ENML -> \(string)")
+      elementContent = elementContent + string
+  }
+
+  func parser(_ parser: XMLParser, foundIgnorableWhitespace whitespaceString: String) {
+    print("Found ignorable whitespace")
   }
 }

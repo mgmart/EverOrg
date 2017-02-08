@@ -22,16 +22,34 @@
 
 import Foundation
 
-enum ElementType {
-  case Text
-  case Strong
-  case Emphasis
-  case Links
-  case Image
-  case Attachment
+enum FormatType: String{
+  case Strong = "b"
+  case Italic = "i"
+  case Underlined = "u"
+  case lineBreak = "br"
+  //  case Verbatim = "code"
+  case Code = "code"
+  //  case StrikeThrough
 }
 
+
 protocol Element {
+}
+
+struct Link: Element {
+  var target: URL?
+  var text: String?
+}
+
+struct Format: Element {
+  var format: FormatType?
+  var text: String?
+}
+
+struct Table: Element{
+  // we do not need table attributes for
+  // Org mode. Content is sufficient
+  var rows:[[String]]
 }
 
 protocol Media: Element {
@@ -50,10 +68,12 @@ struct Image: Media {
 struct Attachment: Media {
   var hash: String
   var data: Data?
+  var type: String
 
   init(hash: String, data: Data?) {
     self.hash = hash
     self.data = data
+    self.type = ""
   }
 
   init(hash: String) {

@@ -24,7 +24,6 @@ import Foundation
 
 enum BlockType {
   case Paragraph
-  case Heading
   case Figure
   case List
 }
@@ -38,12 +37,13 @@ enum ListType {
 protocol Block {
 }
 
-struct Paragraph: Block {
+struct Heading: Block {
   var elements: [Element] // Text, Code, Markup
+  var level:String
 }
 
-struct Heading: Block {
-  var text:String
+struct Paragraph: Block {
+  var elements: [Element] // Text, Code, Markup
 }
 
 struct Figure: Block {

@@ -44,7 +44,7 @@ struct Note {
 
   var title: String
   var attributes: Attributes
-  var content: Content?
+  var body: [Block] = []
   var tags: [String] = []
 
   init() {

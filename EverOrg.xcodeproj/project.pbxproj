@@ -25,8 +25,6 @@
 		744EF06B1E47825D00DB1E81 /* EverOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04B1E47220700DB1E81 /* EverOrg.swift */; };
 		744EF06C1E47825D00DB1E81 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04C1E47220700DB1E81 /* main.swift */; };
 		744EF06D1E47825D00DB1E81 /* EnmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0511E47224900DB1E81 /* EnmlParser.swift */; };
-		744EF06F1E487A3400DB1E81 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF06E1E487A3400DB1E81 /* Content.swift */; };
-		747451751E487E4A00D18E18 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF06E1E487A3400DB1E81 /* Content.swift */; };
 		747451771E48EF6500D18E18 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747451761E48EF6500D18E18 /* Data+Extension.swift */; };
 		747451791E48F17100D18E18 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747451761E48EF6500D18E18 /* Data+Extension.swift */; };
 		747451861E49B4DB00D18E18 /* EnexParser+AddProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747451851E49B4DB00D18E18 /* EnexParser+AddProperties.swift */; };
@@ -63,7 +61,6 @@
 		744EF05C1E472D4D00DB1E81 /* EverOrgTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverOrgTests.swift; sourceTree = "<group>"; };
 		744EF05E1E472D4D00DB1E81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		744EF0631E477AB000DB1E81 /* EverNoteExportTestData.enex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = EverNoteExportTestData.enex; sourceTree = "<group>"; };
-		744EF06E1E487A3400DB1E81 /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Content.swift; path = Model/Content.swift; sourceTree = "<group>"; };
 		747451761E48EF6500D18E18 /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Extension.swift"; path = "EverOrg/Extensions/Data+Extension.swift"; sourceTree = "<group>"; };
 		747451821E48F4D200D18E18 /* EverOrg-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EverOrg-Bridging-Header.h"; sourceTree = "<group>"; };
 		747451851E49B4DB00D18E18 /* EnexParser+AddProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "EnexParser+AddProperties.swift"; path = "Parser/EnexParser+AddProperties.swift"; sourceTree = "<group>"; };
@@ -144,7 +141,6 @@
 		744EF0431E471DF900DB1E81 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				744EF06E1E487A3400DB1E81 /* Content.swift */,
 				744EF0541E47225C00DB1E81 /* Note.swift */,
 				744EF0461E471E6F00DB1E81 /* Block.swift */,
 				744EF0481E47202300DB1E81 /* Element.swift */,
@@ -269,7 +265,6 @@
 				744EF0471E471E6F00DB1E81 /* Block.swift in Sources */,
 				7474518A1E49B67200D18E18 /* EnmlParser+AddProperties.swift in Sources */,
 				744EF0491E47202300DB1E81 /* Element.swift in Sources */,
-				744EF06F1E487A3400DB1E81 /* Content.swift in Sources */,
 				744EF0551E47225C00DB1E81 /* Note.swift in Sources */,
 				747451771E48EF6500D18E18 /* Data+Extension.swift in Sources */,
 				744EF0521E47224900DB1E81 /* EnexParser.swift in Sources */,
@@ -287,7 +282,6 @@
 				744EF06A1E47825D00DB1E81 /* ConsoleIO.swift in Sources */,
 				7474518D1E49B7E900D18E18 /* EnexParser+Content.swift in Sources */,
 				744EF06C1E47825D00DB1E81 /* main.swift in Sources */,
-				747451751E487E4A00D18E18 /* Content.swift in Sources */,
 				744EF06B1E47825D00DB1E81 /* EverOrg.swift in Sources */,
 				744EF0671E47825D00DB1E81 /* Block.swift in Sources */,
 				744EF05D1E472D4D00DB1E81 /* EverOrgTests.swift in Sources */,

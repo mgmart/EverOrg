@@ -53,7 +53,7 @@ class EverOrgTests: XCTestCase {
   }
 
   func testAttachment() {
-    if let figure = enexParser.notes.last?.content?.body.first as? Figure,
+    if let figure = enexParser.notes.last?.body.first as? Figure,
       let attachment = figure.element as? Attachment {
 
       XCTAssertEqual(attachment.hash, attachment.data?.hexString)
@@ -62,7 +62,7 @@ class EverOrgTests: XCTestCase {
   }
 
   func testImage() {
-    if let figure = enexParser.notes[2].content?.body.first as? Figure,
+    if let figure = enexParser.notes[2].body[4] as? Figure,
       let image = figure.element as? Image {
 
       XCTAssertEqual(image.hash, image.data?.hexString)
@@ -70,5 +70,42 @@ class EverOrgTests: XCTestCase {
       XCTAssertEqual(image.alt, "https://api.travis-ci.org/mgmart/EverOrg.png")
 
     } else { XCTFail() }
+  }
+
+  func testLink() {
+    for note in enexParser.notes {
+      if note.title == "mgmart/EverOrg" {
+        for block in note.body {
+          if let para = block as? Paragraph {
+            for paragraph in para.elements {
+              if let link = paragraph as? Link {
+                XCTAssertEqual(link.target, URL(string: "https://github.com/MobileOrg/mobileorg.next"))
+                XCTAssertEqual(link.text, "MobileOrg v2")
+                return
+              }
+            }
+          }
+        }
+      }
+    }
+    XCTFail()
+  }
+
+  func testIsTextPresent() {
+    for note in enexParser.notes {
+      if note.title == "iPad memo" {
+        for block in note.body {
+          if let para = block as? Paragraph {
+            for paragraph in para.elements {
+              if let text = paragraph as? Format {
+                XCTAssertEqual(text.text, "Violets are violet")
+                return
+              }
+            }
+          }
+        }
+      }
+    }
+    XCTFail()
   }
 }

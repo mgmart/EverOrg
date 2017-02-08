@@ -60,13 +60,17 @@ extension EnmlParser {
       case .Pdf:
         let element = Attachment(hash: mediaHash)
         let figure = Figure(element: element)
-        content?.body.append(figure)
+        content.append(figure)
       case .Jpeg, .Png:
         width = width != nil ? width : 0
         height = height != nil ? height : 0
         let element = Image(hash: mediaHash, width: width!, heigth: height!, alt: alt, data: nil)
           let figure = Figure(element: element)
-          content?.body.append(figure)
+          content.append(figure)
+      case .Mp4:
+        let element = Attachment(hash: mediaHash)
+        let figure = Figure(element: element)
+        content.append(figure)
       }
       return true
     } else {
