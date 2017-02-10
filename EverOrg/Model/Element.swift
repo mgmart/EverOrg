@@ -44,7 +44,6 @@ protocol Element {
 struct Link: Element {
   var target: URL?
   var text: String
-  var element: Element?
 
   init(target: URL?, text: String) {
     self.target = target
@@ -60,7 +59,6 @@ struct Format: Element {
 
 struct Plain: Element {
   var text: String
-  var element: Element?
 
   init(text: String) {
     self.text = text
@@ -72,7 +70,6 @@ struct Table: Element{
   // Org mode. Content is sufficient
   var text: String
   var rows:[[String]] = []
-  var element: Element?
 }
 
 protocol Media: Element {
@@ -86,11 +83,15 @@ struct Image: Media {
   var heigth: Int
   var alt: String?
   var data: Data?
-  var element: Element?
   var text: String
 
   init(hash: String, width: Int, heigth: Int, alt: String?) {
-    self.init(hash: hash, width: width, heigth: heigth, alt: alt, data: nil)
+    self.alt = alt
+    self.hash = hash
+    self.width = width
+    self.heigth = heigth
+    self.data = nil
+    self.text = ""
   }
 
   init(hash: String, width: Int, heigth: Int, alt: String?, data: Data?) {
@@ -107,7 +108,6 @@ struct Attachment: Media {
   var hash: String
   var data: Data?
   var type: String
-  var element: Element?
   var text: String
 
   init(hash: String, data: Data?) {
