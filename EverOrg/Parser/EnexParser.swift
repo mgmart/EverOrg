@@ -71,32 +71,22 @@ class EnexParser: NSObject, XMLParserDelegate {
   var elementContent:String?
 
   public override init() {
-    print("Init")
     super.init()
   }
 
   // MARK: Parser Delegate
 
   func parserDidStartDocument(_ parser: XMLParser) {
-    print("start Document")
   }
 
   func parserDidEndDocument(_ parser: XMLParser) {
-    print("End Document: \(notes.count)")
-    for note in notes {
-      print(note.title)
-    }
   }
 
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
     guard let _ = Evernote(rawValue: elementName) else {
-      print("Start Element not processed: \(elementName)")
+      // print("Start Element not processed: \(elementName)")
       return
     }
-
-//    for (rawkey, strValue) in attributeDict {
-//      print("Key: \(rawkey), Value: \(strValue)")
-//    }
 
     // Put current element on stack
     if let top = Evernote(rawValue: elementName) {
@@ -121,7 +111,7 @@ class EnexParser: NSObject, XMLParserDelegate {
 
   func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     guard let _ = Evernote(rawValue: elementName) else {
-      print("End Element not processed: \(elementName)")
+      // print("End Element not processed: \(elementName)")
       return
     }
 
@@ -209,7 +199,7 @@ class EnexParser: NSObject, XMLParserDelegate {
       case .Content:
         break
       default:
-        print("Not processed: \(elementName)")
+        break
       }
     }
   }
@@ -223,8 +213,6 @@ class EnexParser: NSObject, XMLParserDelegate {
   }
 
   func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
-    // print("CDATA begins for: \(topElement.last)")
-
     // Not sure if we should process recognition information
     if topElement.last != Evernote.Recoginition {
 

@@ -53,8 +53,7 @@ class EverOrgTests: XCTestCase {
   }
 
   func testAttachment() {
-    if let figure = enexParser.notes.last?.body.first as? Figure,
-      let attachment = figure.element as? Attachment {
+    if let attachment = enexParser.notes.last?.body.first as? Attachment {
 
       XCTAssertEqual(attachment.hash, attachment.data?.hexString)
 
@@ -62,8 +61,7 @@ class EverOrgTests: XCTestCase {
   }
 
   func testImage() {
-    if let figure = enexParser.notes[2].body[4] as? Figure,
-      let image = figure.element as? Image {
+    if let image = enexParser.notes[2].body[6] as? Image {
 
       XCTAssertEqual(image.hash, image.data?.hexString)
       XCTAssertEqual(image.width, 91)
@@ -74,17 +72,13 @@ class EverOrgTests: XCTestCase {
 
   func testLink() {
     for note in enexParser.notes {
-      if note.title == "mgmart/EverOrg" {
-        for block in note.body {
-          if let para = block as? Paragraph {
-            for paragraph in para.elements {
-              if let link = paragraph as? Link {
-                XCTAssertEqual(link.target, URL(string: "https://github.com/MobileOrg/mobileorg.next"))
-                XCTAssertEqual(link.text, "MobileOrg v2")
-                return
-              }
-            }
-          }
+
+      guard note.title == "mgmart/EverOrg" else {continue}
+
+      for element in note.body {
+        if let link = element as? Link {
+          XCTAssertEqual(link.target, URL(string: "https://github.com/mgmart/EverOrg#everorg"))
+          return
         }
       }
     }
@@ -94,18 +88,29 @@ class EverOrgTests: XCTestCase {
   func testIsTextPresent() {
     for note in enexParser.notes {
       if note.title == "iPad memo" {
-        for block in note.body {
-          if let para = block as? Paragraph {
-            for paragraph in para.elements {
-              if let text = paragraph as? Format {
-                XCTAssertEqual(text.text, "Violets are violet")
-                return
-              }
-            }
+        for element in note.body {
+          if let text = element as? Plain {
+            XCTAssertEqual(text.text, "Violets are violet")
+            return
           }
         }
       }
     }
     XCTFail()
   }
+
+  func testTextMarkup() {
+    for note in enexParser.notes {
+      if note.title == "iPad memo" {
+        for element in note.body {
+          if let text = element as? Plain {
+            XCTAssertEqual(text.text, "Violets are violet")
+            return
+          }
+        }
+      }
+    }
+    XCTFail()
+  }
+
 }

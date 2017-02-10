@@ -48,29 +48,24 @@ extension EnmlParser {
         // align, alt, longdesc, border, hspace, vspace, usemap
         // do not have any correspondent attribute in Org mode
         // at the moment
-        print("unprocessed key \(rawkey) with value \(strValue)")
+        // print("unprocessed key \(rawkey) with value \(strValue)")
         break
       }
     }
+
 
     if let mediaHash = hash, let mType = type,
       let mediaType = MediaItemType(rawValue: mType){
 
       switch mediaType {
-      case .Pdf:
-        let element = Attachment(hash: mediaHash)
-        let figure = Figure(element: element)
-        content.append(figure)
+      case .Pdf, .Mp4:
+        let attachment = Attachment(hash: mediaHash)
+        content.append(attachment)
       case .Jpeg, .Png:
         width = width != nil ? width : 0
         height = height != nil ? height : 0
-        let element = Image(hash: mediaHash, width: width!, heigth: height!, alt: alt, data: nil)
-          let figure = Figure(element: element)
-          content.append(figure)
-      case .Mp4:
-        let element = Attachment(hash: mediaHash)
-        let figure = Figure(element: element)
-        content.append(figure)
+        let image = Image(hash: mediaHash, width: width!, heigth: height!, alt: alt)
+        content.append(image)
       }
       return true
     } else {

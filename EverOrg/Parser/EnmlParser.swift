@@ -31,10 +31,6 @@ class EnmlParser: NSObject, XMLParserDelegate {
     case Link = "a"
     case Paragraph = "p"
     case Span = "span"
-    case Headline1 = "h1"
-    case Headline2 = "h2"
-    case Headline3 = "h3"
-    case Headline4 = "h4"
     case HorizontalLine = "hr"
     case Division = "div"
     case Font = "font"
@@ -49,10 +45,9 @@ class EnmlParser: NSObject, XMLParserDelegate {
   }
 
   var elementContent = ""
-  var content: [Block] = []
-  var block: Block?
-  var paragraph = Paragraph(elements: [])
-  var element: Element?
+  var content: [Element] = []
+  var elementStack: [Element] = []
+  var element:Element = Plain(text: "")
 
   var width: Int?
   var height: Int?
@@ -62,49 +57,58 @@ class EnmlParser: NSObject, XMLParserDelegate {
   func parserDidStartDocument(_ parser: XMLParser) {
   }
   func parserDidEndDocument(_ parser: XMLParser) {
-    // print("Content: \(content)")
   }
 
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-    if let currentElement = Enml(rawValue: elementName) {
+
+    if var element = elementStack.last,
+      elementContent.characters.count > 0 {
+      elementStack[elementStack.count - 1].text = element.text + elementContent
+      elementContent = ""
+    }
+
+    if let formatType = FormatType(rawValue: elementName) {
+      let newElement = Format(format: formatType, text: "")
+      elementStack.append(newElement)
+    }
+    else if let currentElement = Enml(rawValue: elementName) {
       switch currentElement {
       case .Media:
         guard addMedia(attributeDict) else {
           parser.abortParsing()
           return
         }
-       case .Note:
+      case .Note:
         for (rawkey, strValue) in attributeDict {
           switch rawkey {
           default:
-            print("unprocessed key \(rawkey) with value \(strValue)")
+            break
           }
         }
       case .Table:
         // Table Attributes are not usable within Org Mode
-          tableRows = [[]]
+        tableRows = [[]]
       case .Link:
+        var link = (Link(target: nil, text: ""))
+
         for (rawkey, strValue) in attributeDict {
           if rawkey == "href" {
-            element = Link(target: URL(string: strValue), text: nil)
+            link.target = URL(string: strValue)
           }
-          let text = Format(format: nil, text: elementContent)
-          paragraph.elements.append(text)
-          elementContent = ""
         }
+        elementStack.append(link)
+
+
       case .Paragraph, .Span, .Font:
-        paragraph = Paragraph(elements: [])
-      case .Headline1, .Headline2, .Headline3, .Headline4:
-        block = Heading(elements: [], level: elementName)
+        elementStack.append(Plain(text: ""))
       case .HorizontalLine, .Division:
         break // FIXME: Ignored that for now.
       }
     } else if FormatType(rawValue: elementName) == nil {
-      print("Element -> \(elementName)")
       for (rawkey, strValue) in attributeDict {
         switch rawkey {
         default:
-          print("unprocessed key \(rawkey) with value \(strValue)")
+          break;
         }
       }
     }
@@ -112,36 +116,34 @@ class EnmlParser: NSObject, XMLParserDelegate {
 
   func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
 
-    if let elementType = FormatType(rawValue: elementName) {
-      let element = Format(format: elementType, text: elementContent)
-      paragraph.elements.append(element)
+    if let elementType = FormatType(rawValue: elementName),
+      let textElement = elementStack.popLast() as? Format {
+      let element = Format(format: elementType, text: textElement.text + elementContent)
       elementContent = ""
+      content.append(element)
     }
+
     else if let curElement = Enml(rawValue: elementName) {
       switch curElement {
       case .Link:
-        if let link = element as? Link {
-          paragraph.elements.append(Link(target: link.target, text: elementContent))
+        if let link = elementStack.popLast() as? Link {
+          let newLink = Link(target: link.target, text: link.text + elementContent)
           elementContent = ""
+          content.append(newLink)
         }
       case .Paragraph, .Span, .Font:
-          paragraph.elements.append(Format(format: nil, text: elementContent))
-          content.append(paragraph)
+        if let element = elementStack.popLast() as? Plain{
+          let newPlain = Plain(text: element.text + elementContent)
           elementContent = ""
-      case.Headline1, .Headline2, .Headline3, .Headline4:
-        if var headline = block as? Heading {
-          paragraph.elements.append(Format(format: nil, text: elementContent))
-          headline.elements.append(contentsOf: paragraph.elements)
-          content.append(headline)
+          content.append(newPlain)
         }
       default:
-        print("Unprocessed content: \(elementContent)")
+        break
       }
     } else {
-      print("Unprocessed ENML: \(elementName) with content \(elementContent)")
+      // print("Unprocessed ENML: \(elementName) with content \(elementContent)")
     }
     elementContent = ""
-    element = nil
   }
 
 
@@ -150,7 +152,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
   }
 
   func parser(_ parser: XMLParser, foundCharacters string: String) {
-      elementContent = elementContent + string
+    elementContent = elementContent + string
   }
 
   func parser(_ parser: XMLParser, foundIgnorableWhitespace whitespaceString: String) {

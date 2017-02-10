@@ -27,7 +27,7 @@
 
 ** Status 
 
-*** Reader [11/15]
+*** Reader [10/15]
 
     - [X] Attachments
     - [X] Images
@@ -35,21 +35,21 @@
     - [X] Geodata
     - [X] Author
     - [X] Plaintext
-    - [X] Tables
+    - [ ] Tables
     - [ ] Checklists
     - [ ] Lists
     - [ ] Reminders
     - [X] Headings
     - [X] Tags
-    - [ ] Links  
-    - [X] Created
+    - [X] Links  
+    - [ ] Created
     - [X] Updated
 
-*** Writer [1/7]
+*** Writer [0/7]
 
    - [ ] Headlines
    - [ ] Properties
-   - [X] Attachments
+   - [ ] Attachments
    - [ ] Scheduled
    - [ ] Lists
    - [ ] Links

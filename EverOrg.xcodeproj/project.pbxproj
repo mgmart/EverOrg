@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		744EF0471E471E6F00DB1E81 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0461E471E6F00DB1E81 /* Block.swift */; };
 		744EF0491E47202300DB1E81 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0481E47202300DB1E81 /* Element.swift */; };
 		744EF04D1E47220700DB1E81 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04A1E47220700DB1E81 /* ConsoleIO.swift */; };
 		744EF04E1E47220700DB1E81 /* EverOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04B1E47220700DB1E81 /* EverOrg.swift */; };
@@ -19,7 +18,6 @@
 		744EF0641E477AB000DB1E81 /* EverNoteExportTestData.enex in Resources */ = {isa = PBXBuildFile; fileRef = 744EF0631E477AB000DB1E81 /* EverNoteExportTestData.enex */; };
 		744EF0651E47820200DB1E81 /* EnexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0501E47224900DB1E81 /* EnexParser.swift */; };
 		744EF0661E47824E00DB1E81 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0541E47225C00DB1E81 /* Note.swift */; };
-		744EF0671E47825D00DB1E81 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0461E471E6F00DB1E81 /* Block.swift */; };
 		744EF0681E47825D00DB1E81 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0481E47202300DB1E81 /* Element.swift */; };
 		744EF06A1E47825D00DB1E81 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04A1E47220700DB1E81 /* ConsoleIO.swift */; };
 		744EF06B1E47825D00DB1E81 /* EverOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04B1E47220700DB1E81 /* EverOrg.swift */; };
@@ -49,7 +47,6 @@
 
 /* Begin PBXFileReference section */
 		744EF02B1E44FCA700DB1E81 /* EverOrg */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EverOrg; sourceTree = BUILT_PRODUCTS_DIR; };
-		744EF0461E471E6F00DB1E81 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Block.swift; path = Model/Block.swift; sourceTree = "<group>"; };
 		744EF0481E47202300DB1E81 /* Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Element.swift; path = Model/Element.swift; sourceTree = "<group>"; };
 		744EF04A1E47220700DB1E81 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConsoleIO.swift; path = main/ConsoleIO.swift; sourceTree = "<group>"; };
 		744EF04B1E47220700DB1E81 /* EverOrg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EverOrg.swift; path = main/EverOrg.swift; sourceTree = "<group>"; };
@@ -142,7 +139,6 @@
 			isa = PBXGroup;
 			children = (
 				744EF0541E47225C00DB1E81 /* Note.swift */,
-				744EF0461E471E6F00DB1E81 /* Block.swift */,
 				744EF0481E47202300DB1E81 /* Element.swift */,
 			);
 			name = Model;
@@ -262,7 +258,6 @@
 				744EF04E1E47220700DB1E81 /* EverOrg.swift in Sources */,
 				744EF0531E47224900DB1E81 /* EnmlParser.swift in Sources */,
 				744EF04F1E47220700DB1E81 /* main.swift in Sources */,
-				744EF0471E471E6F00DB1E81 /* Block.swift in Sources */,
 				7474518A1E49B67200D18E18 /* EnmlParser+AddProperties.swift in Sources */,
 				744EF0491E47202300DB1E81 /* Element.swift in Sources */,
 				744EF0551E47225C00DB1E81 /* Note.swift in Sources */,
@@ -283,7 +278,6 @@
 				7474518D1E49B7E900D18E18 /* EnexParser+Content.swift in Sources */,
 				744EF06C1E47825D00DB1E81 /* main.swift in Sources */,
 				744EF06B1E47825D00DB1E81 /* EverOrg.swift in Sources */,
-				744EF0671E47825D00DB1E81 /* Block.swift in Sources */,
 				744EF05D1E472D4D00DB1E81 /* EverOrgTests.swift in Sources */,
 				744EF0661E47824E00DB1E81 /* Note.swift in Sources */,
 				747451791E48F17100D18E18 /* Data+Extension.swift in Sources */,
