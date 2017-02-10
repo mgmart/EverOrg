@@ -71,6 +71,11 @@ struct Table: Element{
   var rows:[TableRow] = []
 }
 
+struct CheckItem: Element {
+  var text: String
+  var value: Bool
+}
+
 struct TableRow: Element {
   var text: String
   var fields: [TableField]

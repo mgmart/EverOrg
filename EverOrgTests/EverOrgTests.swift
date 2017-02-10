@@ -104,20 +104,21 @@ class EverOrgTests: XCTestCase {
     XCTFail()
   }
 
-  // TODO: Markup test is missing
-//  func testTextMarkup() {
-//    for note in enexParser.notes {
-//      if note.title == "iPad memo" {
-//        for element in note.body {
-//          if let text = element as? Plain {
-//            XCTAssertEqual(text.text, "Violets are violet")
-//            return
-//          }
-//        }
-//      }
-//    }
-//    XCTFail()
-//  }
+  func testTextMarkup() {
+    for note in enexParser.notes {
+      if note.title == "Another Note" {
+        for element in note.body where element is Format{
+          if let testObject = element as? Format {
+            if testObject.format == .Strong {
+              XCTAssertEqual(testObject.text, "more")
+              return
+            }
+          }
+        }
+      }
+    }
+    XCTFail()
+  }
 
   func testTables() {
     for note in enexParser.notes {
@@ -129,6 +130,18 @@ class EverOrgTests: XCTestCase {
           XCTAssertEqual(table.rows.first?.fields.last?.content.first?.text, "Org mode")
           return
         }
+      }
+    }
+    XCTFail()
+  }
+
+  func testCheckItems() {
+    for note in enexParser.notes {
+
+      guard note.title == "Another Note" else {continue}
+      if let checkItem = note.body[17] as? CheckItem {
+        XCTAssertTrue(checkItem.value)
+        return
       }
     }
     XCTFail()

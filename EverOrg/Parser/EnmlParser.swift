@@ -36,6 +36,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
     case HorizontalLine = "hr"
     case Division = "div"
     case Font = "font"
+    case CheckItem = "en-todo"
   }
 
   var elementContent = ""
@@ -104,8 +105,18 @@ class EnmlParser: NSObject, XMLParserDelegate {
 
       case .Paragraph, .Span, .Font, .Division:
         elementStack.append(Plain(text: ""))
-      case .HorizontalLine, .Division:
+      case .HorizontalLine:
         break // FIXME: Ignored that for now.
+      case .CheckItem:
+        for (rawkey, strValue) in attributeDict {
+          if rawkey == "checked" {
+            if let status = Bool(strValue) {
+              elementStack.append(CheckItem(text: "", value: status))
+            } else {
+              elementStack.append(CheckItem(text: "", value: false))
+            }
+          }
+        }
       }
     } else if FormatType(rawValue: elementName) == nil {
       for (rawkey, strValue) in attributeDict {
@@ -161,6 +172,13 @@ class EnmlParser: NSObject, XMLParserDelegate {
           tableContent = nil
           content.append(table)
         }
+      case .CheckItem:
+        if let element = elementStack.popLast() as? CheckItem{
+          let checkItem = CheckItem(text: element.text + elementContent, value: element.value)
+          elementContent = ""
+          addContent(element: checkItem)
+        }
+
 
       default:
         // TODO: Complete switch cases

@@ -27,7 +27,7 @@
 
 ** Status 
 
-*** Reader [12/16]
+*** Reader [14/16]
 
     - [X] Attachments
     - [X] Images
@@ -36,14 +36,14 @@
     - [X] Author
     - [X] Plaintext
     - [X] Tables
-    - [ ] Checklists
+    - [X] Checklists
     - [ ] Lists
     - [ ] Reminders
     - [X] Headings
     - [X] Tags
     - [X] Links
     - [X] Markup
-    - [ ] Created
+    - [X] Created
     - [X] Updated
 
 *** Writer [0/7]
