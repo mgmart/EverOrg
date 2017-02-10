@@ -28,6 +28,8 @@ class EnmlParser: NSObject, XMLParserDelegate {
     case Media = "en-media"
     case Note = "en-note"
     case Table = "table"
+    case TableRow = "tr"
+    case TableField = "td"
     case Link = "a"
     case Paragraph = "p"
     case Span = "span"
@@ -37,13 +39,18 @@ class EnmlParser: NSObject, XMLParserDelegate {
   }
 
   var elementContent = ""
-  var content: [Element] = []
   var elementStack: [Element] = []
+
+
+  var content: [Element] = []
+
+  var tableContent: [TableRow]?
+  var rowContent: [TableField]?
+  var fieldContent: [Element]?
+
 
   var width: Int?
   var height: Int?
-
-  var tableRows: [[String]]?
 
   func parserDidStartDocument(_ parser: XMLParser) {
   }
@@ -78,7 +85,12 @@ class EnmlParser: NSObject, XMLParserDelegate {
         }
       case .Table:
         // Table Attributes are not usable within Org Mode
-        tableRows = [[]]
+        tableContent = []
+      case .TableRow:
+        rowContent = []
+      case .TableField:
+        fieldContent = []
+        
       case .Link:
         var link = (Link(target: nil, text: ""))
 
@@ -90,7 +102,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
         elementStack.append(link)
 
 
-      case .Paragraph, .Span, .Font:
+      case .Paragraph, .Span, .Font, .Division:
         elementStack.append(Plain(text: ""))
       case .HorizontalLine, .Division:
         break // FIXME: Ignored that for now.
@@ -111,7 +123,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
       let textElement = elementStack.popLast() as? Format {
       let element = Format(format: elementType, text: textElement.text + elementContent)
       elementContent = ""
-      content.append(element)
+      addContent(element: element)
     }
 
     else if let curElement = Enml(rawValue: elementName) {
@@ -120,15 +132,38 @@ class EnmlParser: NSObject, XMLParserDelegate {
         if let link = elementStack.popLast() as? Link {
           let newLink = Link(target: link.target, text: link.text + elementContent)
           elementContent = ""
-          content.append(newLink)
+          addContent(element: newLink)
         }
-      case .Paragraph, .Span, .Font:
+      case .Paragraph, .Span, .Font, .Division:
         if let element = elementStack.popLast() as? Plain{
           let newPlain = Plain(text: element.text + elementContent)
           elementContent = ""
-          content.append(newPlain)
+          addContent(element: newPlain)
         }
+      case .TableField:
+        if let tableFieldContent = fieldContent {
+          let tableField = TableField(text: elementContent, content: tableFieldContent)
+          rowContent?.append(tableField)
+          elementContent = ""
+          fieldContent = nil
+        }
+      case .TableRow:
+        if let tableRowContent = rowContent {
+          let tableRow = TableRow(text: elementContent, fields: tableRowContent)
+          tableContent?.append(tableRow)
+          elementContent = ""
+          rowContent = nil
+        }
+      case .Table:
+        if let thisTableContent = tableContent {
+          let table = Table(text: elementContent, rows: thisTableContent)
+          elementContent = ""
+          tableContent = nil
+          content.append(table)
+        }
+
       default:
+        // TODO: Complete switch cases
         break
       }
     } else {

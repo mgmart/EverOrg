@@ -62,15 +62,23 @@ extension EnmlParser {
         width = width != nil ? width : 0
         height = height != nil ? height : 0
         let image = Image(hash: mediaHash, width: width!, heigth: height!, alt: alt)
-        content.append(image)
+        addContent(element: image)
       } else {
         let attachment = Attachment(hash: mediaHash)
-        content.append(attachment)
+        addContent(element: attachment)
       }
       return true
     } else {
       print("media not processed: \(type)")
       return false
+    }
+  }
+
+  func addContent(element: Element) {
+    if fieldContent != nil {
+      fieldContent?.append(element)
+    } else {
+      content.append(element)
     }
   }
 }

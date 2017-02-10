@@ -27,7 +27,7 @@
 
 ** Status 
 
-*** Reader [10/15]
+*** Reader [12/16]
 
     - [X] Attachments
     - [X] Images
@@ -35,13 +35,14 @@
     - [X] Geodata
     - [X] Author
     - [X] Plaintext
-    - [ ] Tables
+    - [X] Tables
     - [ ] Checklists
     - [ ] Lists
     - [ ] Reminders
     - [X] Headings
     - [X] Tags
-    - [X] Links  
+    - [X] Links
+    - [X] Markup
     - [ ] Created
     - [X] Updated
 

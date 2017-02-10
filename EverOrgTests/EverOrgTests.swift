@@ -53,11 +53,16 @@ class EverOrgTests: XCTestCase {
   }
 
   func testAttachment() {
-    if let attachment = enexParser.notes.last?.body.first as? Attachment {
 
-      XCTAssertEqual(attachment.hash, attachment.data?.hexString)
+    for note in enexParser.notes {
 
-    } else { XCTFail() }
+      guard note.title == "iPad memo" else {continue}
+      if let attachment = note.body.first as? Attachment {
+        XCTAssertEqual(attachment.hash, attachment.data?.hexString)
+        return
+      }
+    }
+    XCTFail()
   }
 
   func testImage() {
@@ -89,8 +94,8 @@ class EverOrgTests: XCTestCase {
     for note in enexParser.notes {
       if note.title == "iPad memo" {
         for element in note.body {
-          if let text = element as? Plain {
-            XCTAssertEqual(text.text, "Violets are violet")
+          if let text = element as? Plain,
+            text.text == "Violets are violet" {
             return
           }
         }
@@ -99,18 +104,33 @@ class EverOrgTests: XCTestCase {
     XCTFail()
   }
 
-  func testTextMarkup() {
+  // TODO: Markup test is missing
+//  func testTextMarkup() {
+//    for note in enexParser.notes {
+//      if note.title == "iPad memo" {
+//        for element in note.body {
+//          if let text = element as? Plain {
+//            XCTAssertEqual(text.text, "Violets are violet")
+//            return
+//          }
+//        }
+//      }
+//    }
+//    XCTFail()
+//  }
+
+  func testTables() {
     for note in enexParser.notes {
-      if note.title == "iPad memo" {
-        for element in note.body {
-          if let text = element as? Plain {
-            XCTAssertEqual(text.text, "Violets are violet")
-            return
-          }
+
+      guard note.title == "Tables and tables" else {continue}
+      for element in note.body {
+        if let table = element as? Table {
+          XCTAssertEqual(table.rows.count, 4)
+          XCTAssertEqual(table.rows.first?.fields.last?.content.first?.text, "Org mode")
+          return
         }
       }
     }
     XCTFail()
   }
-
 }

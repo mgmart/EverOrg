@@ -38,7 +38,6 @@ enum FormatType: String{
 
 protocol Element {
   var text: String {get set}
-
 }
 
 struct Link: Element {
@@ -69,7 +68,17 @@ struct Table: Element{
   // we do not need table attributes for
   // Org mode. Content is sufficient
   var text: String
-  var rows:[[String]] = []
+  var rows:[TableRow] = []
+}
+
+struct TableRow: Element {
+  var text: String
+  var fields: [TableField]
+}
+
+struct TableField: Element {
+  var text: String
+  var content: [Element]
 }
 
 protocol Media: Element {
