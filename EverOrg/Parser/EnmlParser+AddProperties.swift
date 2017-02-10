@@ -54,18 +54,18 @@ extension EnmlParser {
     }
 
 
+    let tagClass = kUTTagClassMIMEType
     if let mediaHash = hash, let mType = type,
-      let mediaType = MediaItemType(rawValue: mType){
+      let mediaType = UTTypeCreatePreferredIdentifierForTag(tagClass, mType as CFString, nil)?.takeRetainedValue() {
 
-      switch mediaType {
-      case .Pdf, .Mp4:
-        let attachment = Attachment(hash: mediaHash)
-        content.append(attachment)
-      case .Jpeg, .Png:
+      if UTTypeConformsTo(mediaType, kUTTypeImage) {
         width = width != nil ? width : 0
         height = height != nil ? height : 0
         let image = Image(hash: mediaHash, width: width!, heigth: height!, alt: alt)
         content.append(image)
+      } else {
+        let attachment = Attachment(hash: mediaHash)
+        content.append(attachment)
       }
       return true
     } else {

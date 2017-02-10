@@ -36,18 +36,9 @@ class EnmlParser: NSObject, XMLParserDelegate {
     case Font = "font"
   }
 
-  // TODO: There must be something already defined in SDK
-  enum MediaItemType: String {
-    case Pdf = "application/pdf"
-    case Jpeg = "image/jpeg"
-    case Png = "image/png"
-    case Mp4 = "audio/x-m4a"
-  }
-
   var elementContent = ""
   var content: [Element] = []
   var elementStack: [Element] = []
-  var element:Element = Plain(text: "")
 
   var width: Int?
   var height: Int?
