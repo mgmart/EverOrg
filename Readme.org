@@ -48,15 +48,16 @@
     - [X] Created
     - [X] Updated
 
-*** Writer [0/7]
+*** Writer [4/8]
 
-   - [ ] Headlines
-   - [ ] Properties
+   - [X] Headlines
+   - [X] Properties
    - [ ] Attachments
    - [ ] Scheduled
    - [ ] Lists
-   - [ ] Links
-   - [ ] Tags
+   - [X] Links
+   - [X] Tags
+   - [ ] Images
 
 
 ** License

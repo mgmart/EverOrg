@@ -38,6 +38,7 @@ enum FormatType: String{
 
 protocol Element {
   var text: String {get set}
+  var orgRepresentation: String {get}
 }
 
 struct Link: Element {
@@ -48,12 +49,78 @@ struct Link: Element {
     self.target = target
     self.text = text
   }
+
+  var linkText: String {
+    if self.text.characters.count > 0 {
+      return self.text
+    } else {
+      return " "
+    }
+  }
+
+  var orgRepresentation: String {
+    get {
+      return "[[\(target?.absoluteString ?? "" )][\(linkText)]]"
+    }
+  }
 }
 
 struct Format: Element {
+
   var format: FormatType?
   var text: String
 
+  var begin: String? {
+    if let frmt = format {
+      switch frmt {
+      case .head1:
+        return "\n** "
+      case .head2:
+        return "\n*** "
+      case .head3:
+        return "\n**** "
+      case .head4:
+        return "\n***** "
+      case .Strong:
+        return "*"
+      case .Underlined:
+        return "_"
+      case .Italic:
+        return "/"
+      case .lineBreak:
+        return "\n"
+      default:
+        return nil
+      }
+    }
+    return nil
+  }
+
+  var end: String? {
+    if let frmt = format {
+      switch frmt {
+      case .Strong:
+        return "*"
+      case .Underlined:
+        return "_"
+      case .Italic:
+        return "/"
+      case .head1, .head2, .head3, .head4:
+        return "\n"
+      default:
+        return nil
+      }
+    }
+    return nil
+  }
+
+  var orgRepresentation: String {
+    if text.characters.count > 0 {
+      return "\(begin ?? "")\(text)\(end ?? "")"
+    } else {
+      return ""
+    }
+  }
 }
 
 struct Plain: Element {
@@ -62,6 +129,12 @@ struct Plain: Element {
   init(text: String) {
     self.text = text
   }
+
+  var orgRepresentation: String {
+    get {
+      return text
+    }
+  }
 }
 
 struct Table: Element{
@@ -69,21 +142,62 @@ struct Table: Element{
   // Org mode. Content is sufficient
   var text: String
   var rows:[TableRow] = []
+
+  var orgRepresentation: String {
+    get {
+      var cont = "\(text)\n"
+      for element in rows {
+        cont += element.orgRepresentation
+      }
+      return cont
+    }
+  }
 }
 
 struct CheckItem: Element {
   var text: String
   var value: Bool
+
+  var orgRepresentation: String {
+    get {
+      switch value {
+      case true:
+        return "\n- [X] \(text)"
+      case false:
+        return "\n- [ ] \(text)"
+      }
+    }
+  }
 }
 
 struct TableRow: Element {
   var text: String
   var fields: [TableField]
+
+  var orgRepresentation: String {
+    get {
+      var cont = "|"
+      for element in fields {
+        cont += element.orgRepresentation
+      }
+      return " \(cont) \n"
+    }
+  }
 }
 
 struct TableField: Element {
   var text: String
   var content: [Element]
+
+  var orgRepresentation: String {
+    get {
+      var cont = text
+      for element in content {
+        cont += element.orgRepresentation
+      }
+      return " \(cont) | "
+    }
+  }
 }
 
 protocol Media: Element {
@@ -116,6 +230,12 @@ struct Image: Media {
     self.data = data
     self.text = ""
   }
+
+  var orgRepresentation: String {
+    get {
+      return "\n[[ I M A G E -- Please implement me]]\n"
+    }
+  }
 }
 
 struct Attachment: Media {
@@ -133,6 +253,12 @@ struct Attachment: Media {
 
   init(hash: String) {
     self.init(hash: hash, data: nil)
+  }
+
+  var orgRepresentation: String {
+    get {
+      return "\n[[ A T T A C H M E N T -- Please implement me]]\n"
+    }
   }
 }
 

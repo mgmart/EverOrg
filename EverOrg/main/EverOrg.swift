@@ -61,6 +61,9 @@ struct EverOrg {
         xmlParser?.delegate = enexParser
         xmlParser?.shouldResolveExternalEntities = true
         xmlParser?.parse()
+        for note in enexParser.notes {
+          print(note.orgRepresentation)
+        }
       }
     case .help:
       ConsoleIO.printUsage()

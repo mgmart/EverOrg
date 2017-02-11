@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		740FBFD21E4F806500739808 /* EnexOrgWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740FBFD11E4F806500739808 /* EnexOrgWriter.swift */; };
 		744EF0491E47202300DB1E81 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0481E47202300DB1E81 /* Element.swift */; };
 		744EF04D1E47220700DB1E81 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04A1E47220700DB1E81 /* ConsoleIO.swift */; };
 		744EF04E1E47220700DB1E81 /* EverOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04B1E47220700DB1E81 /* EverOrg.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		740FBFD11E4F806500739808 /* EnexOrgWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnexOrgWriter.swift; path = Parser/EnexOrgWriter.swift; sourceTree = "<group>"; };
 		744EF02B1E44FCA700DB1E81 /* EverOrg */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EverOrg; sourceTree = BUILT_PRODUCTS_DIR; };
 		744EF0481E47202300DB1E81 /* Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Element.swift; path = Model/Element.swift; sourceTree = "<group>"; };
 		744EF04A1E47220700DB1E81 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConsoleIO.swift; path = main/ConsoleIO.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				744EF0501E47224900DB1E81 /* EnexParser.swift */,
 				747451851E49B4DB00D18E18 /* EnexParser+AddProperties.swift */,
 				744EF0511E47224900DB1E81 /* EnmlParser.swift */,
+				740FBFD11E4F806500739808 /* EnexOrgWriter.swift */,
 				747451891E49B67200D18E18 /* EnmlParser+AddProperties.swift */,
 			);
 			name = Parser;
@@ -258,6 +261,7 @@
 				744EF0491E47202300DB1E81 /* Element.swift in Sources */,
 				744EF0551E47225C00DB1E81 /* Note.swift in Sources */,
 				747451771E48EF6500D18E18 /* Data+Extension.swift in Sources */,
+				740FBFD21E4F806500739808 /* EnexOrgWriter.swift in Sources */,
 				744EF0521E47224900DB1E81 /* EnexParser.swift in Sources */,
 				744EF04D1E47220700DB1E81 /* ConsoleIO.swift in Sources */,
 				747451861E49B4DB00D18E18 /* EnexParser+AddProperties.swift in Sources */,

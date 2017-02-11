@@ -39,6 +39,18 @@ struct Note {
     var created: Date?
     var updated: Date?
     var noteAttributes: String?
+
+    var orgRepresentation: String {
+      var cont = latitude != nil ? ":GEO_LAT: \(latitude ?? 0)\n" : ""
+      cont += longitude != nil ? ":GEO_LON: \(longitude ?? 0)\n" : ""
+      cont += altitude != nil ? ":GEO_ALT: \(altitude ?? 0)\n" : ""
+      cont += author != nil ? ":EVN_AUTHOR: \(author ?? "")\n" : ""
+      cont += source != nil ? ":EVN_SOURCE: \(source ?? "")\n" : ""
+      cont += sourceURL != nil ? ":EVN_SOURCE_URL: \(sourceURL?.absoluteString ?? "")\n" : ""
+      cont += created != nil ? ":EVN_CREATED: \(created ?? Date())\n" : ""
+      cont += updated != nil ? ":EVN:UPDATED: \(updated ?? Date())\n" : ""
+      return cont
+    }
   }
 
 
@@ -50,5 +62,28 @@ struct Note {
   init() {
     title = ""
     attributes = Attributes()
+  }
+
+  func printer() {
+    print("\n* \(title)")
+    for element in body {
+      print(element.orgRepresentation, terminator: "")
+    }
+  }
+
+  var orgRepresentation: String {
+    var cont = "\n* \(title)"
+    if tags.count > 0 {
+      cont += "                "
+      for tag in tags {
+        cont += ":\(tag): "
+      }
+    }
+    cont += "\n"
+    cont += ":PROPERTIES:\n\(attributes.orgRepresentation)\n:END:"
+    for element in body {
+      cont += element.orgRepresentation
+    }
+    return cont
   }
 }
