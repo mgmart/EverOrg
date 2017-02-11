@@ -60,13 +60,18 @@ class EnmlParser: NSObject, XMLParserDelegate {
 
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
 
-    if var element = elementStack.last,
-      elementContent.characters.count > 0 {
-      elementStack[elementStack.count - 1].text = element.text + elementContent
-      elementContent = ""
-    }
+//    if var element = elementStack.last,
+//      elementContent.characters.count > 0 {
+//      elementStack[elementStack.count - 1].text = element.text + elementContent
+//      elementContent = ""
+//    }
 
     if let formatType = FormatType(rawValue: elementName) {
+      if var last = elementStack.last as? Plain {
+        last.text += elementContent
+        elementContent = ""
+        content.append(last)
+      }
       let newElement = Format(format: formatType, text: "")
       elementStack.append(newElement)
     }
@@ -100,23 +105,31 @@ class EnmlParser: NSObject, XMLParserDelegate {
             link.target = URL(string: strValue)
           }
         }
+
+
+        let plain = Plain(text: elementContent)
+        elementContent = ""
+        elementStack.append(plain)
+
         elementStack.append(link)
 
+      case .Font, .Span:
+        elementStack.append(Plain(text: ""))
 
-      case .Paragraph, .Span, .Font, .Division:
+      case .Paragraph, .Division:
         elementStack.append(Plain(text: ""))
       case .HorizontalLine:
-        break // FIXME: Ignored that for now.
+        elementStack.append(Format(format: .lineBreak, text: "-----------------------------------------------------------------------------------------------\n"))
+        break
       case .CheckItem:
+        var status = false
         for (rawkey, strValue) in attributeDict {
           if rawkey == "checked" {
-            if let status = Bool(strValue) {
-              elementStack.append(CheckItem(text: "", value: status))
-            } else {
-              elementStack.append(CheckItem(text: "", value: false))
+            status = Bool(strValue) ?? false
             }
           }
-        }
+
+        elementStack.append(CheckItem(text: "", value: status))
       }
     } else if FormatType(rawValue: elementName) == nil {
       for (rawkey, strValue) in attributeDict {
@@ -132,22 +145,30 @@ class EnmlParser: NSObject, XMLParserDelegate {
 
     if let elementType = FormatType(rawValue: elementName),
       let textElement = elementStack.popLast() as? Format {
-      let element = Format(format: elementType, text: textElement.text + elementContent)
-      elementContent = ""
-      addContent(element: element)
+      switch elementType {
+      case .lineBreak:
+        let element = Format(format: elementType, text: "")
+        addContent(element: element)
+      default:
+        let element = Format(format: elementType, text: textElement.text + elementContent)
+        elementContent = ""
+        addContent(element: element)
+      }
     }
 
     else if let curElement = Enml(rawValue: elementName) {
       switch curElement {
       case .Link:
-        if let link = elementStack.popLast() as? Link {
+        if let link = elementStack.popLast() as? Link,
+          let plain = elementStack.popLast() as? Plain {
           let newLink = Link(target: link.target, text: link.text + elementContent)
           elementContent = ""
+          addContent(element: plain)
           addContent(element: newLink)
         }
       case .Paragraph, .Span, .Font, .Division:
         if let element = elementStack.popLast() as? Plain{
-          let newPlain = Plain(text: element.text + elementContent)
+          let newPlain = Plain(text: element.text.trimmingCharacters(in: .newlines) + elementContent.trimmingCharacters(in: .newlines))
           elementContent = ""
           addContent(element: newPlain)
         }
@@ -173,10 +194,15 @@ class EnmlParser: NSObject, XMLParserDelegate {
           content.append(table)
         }
       case .CheckItem:
-        if let element = elementStack.popLast() as? CheckItem{
-          let checkItem = CheckItem(text: element.text + elementContent, value: element.value)
+        if let element = elementStack.popLast() as? CheckItem {
+          let checkItem = CheckItem(text: element.text.trimmingCharacters(in: .whitespaces) +
+              elementContent.trimmingCharacters(in: .whitespacesAndNewlines), value: element.value)
           elementContent = ""
           addContent(element: checkItem)
+        }
+      case .HorizontalLine:
+        if let element = elementStack.popLast() as? Format {
+          addContent(element: element)
         }
 
 
@@ -187,7 +213,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
     } else {
       // print("Unprocessed ENML: \(elementName) with content \(elementContent)")
     }
-    elementContent = ""
+    // elementContent = ""
   }
 
 
