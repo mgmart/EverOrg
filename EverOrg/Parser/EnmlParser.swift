@@ -150,7 +150,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
         let element = Format(format: elementType, text: "")
         addContent(element: element)
       default:
-        let element = Format(format: elementType, text: textElement.text + elementContent)
+        let element = Format(format: elementType, text: textElement.text.trimmingCharacters(in: .whitespacesAndNewlines) + elementContent.trimmingCharacters(in: .whitespacesAndNewlines))
         elementContent = ""
         addContent(element: element)
       }
@@ -168,20 +168,20 @@ class EnmlParser: NSObject, XMLParserDelegate {
         }
       case .Paragraph, .Span, .Font, .Division:
         if let element = elementStack.popLast() as? Plain{
-          let newPlain = Plain(text: element.text.trimmingCharacters(in: .newlines) + elementContent.trimmingCharacters(in: .newlines))
+          let newPlain = Plain(text: element.text.trimmingCharacters(in: .whitespacesAndNewlines) + elementContent.trimmingCharacters(in: .whitespacesAndNewlines))
           elementContent = ""
           addContent(element: newPlain)
         }
       case .TableField:
         if let tableFieldContent = fieldContent {
-          let tableField = TableField(text: elementContent, content: tableFieldContent)
+          let tableField = TableField(text: elementContent.trimmingCharacters(in: .whitespacesAndNewlines), content: tableFieldContent)
           rowContent?.append(tableField)
           elementContent = ""
           fieldContent = nil
         }
       case .TableRow:
         if let tableRowContent = rowContent {
-          let tableRow = TableRow(text: elementContent, fields: tableRowContent)
+          let tableRow = TableRow(text: elementContent.trimmingCharacters(in: .whitespacesAndNewlines), fields: tableRowContent)
           tableContent?.append(tableRow)
           elementContent = ""
           rowContent = nil
@@ -195,7 +195,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
         }
       case .CheckItem:
         if let element = elementStack.popLast() as? CheckItem {
-          let checkItem = CheckItem(text: element.text.trimmingCharacters(in: .whitespaces) +
+          let checkItem = CheckItem(text: element.text.trimmingCharacters(in: .whitespacesAndNewlines) +
               elementContent.trimmingCharacters(in: .whitespacesAndNewlines), value: element.value)
           elementContent = ""
           addContent(element: checkItem)
