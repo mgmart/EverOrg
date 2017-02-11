@@ -66,7 +66,7 @@ class EverOrgTests: XCTestCase {
   }
 
   func testImage() {
-    if let image = enexParser.notes[2].body[6] as? Image {
+    if let image = enexParser.notes[2].body[9] as? Image {
 
       XCTAssertEqual(image.hash, image.data?.hexString)
       XCTAssertEqual(image.width, 91)
@@ -139,7 +139,7 @@ class EverOrgTests: XCTestCase {
     for note in enexParser.notes {
 
       guard note.title == "Another Note" else {continue}
-      if let checkItem = note.body[17] as? CheckItem {
+      if let checkItem = note.body[25] as? CheckItem {
         XCTAssertTrue(checkItem.value)
         return
       }

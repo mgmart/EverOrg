@@ -33,6 +33,32 @@ extension EnexParser {
     return false
   }
 
+
+  func addData() -> Bool {
+    // ENML Parser has prefilled attachment blocks with hashes
+    // We have to find the corresponding hash and add the data
+    if let body = note?.body,
+      let data = Data(base64Encoded: elementContent!, options: .ignoreUnknownCharacters) {
+      for (index, element) in body.enumerated() {
+
+        // FIXME: That could be done much nicer
+        if let attachment = element as? Attachment {
+          if attachment.hash == data.hexString {
+            note?.body[index] = Attachment(hash: attachment.hash, data: data)
+          }
+        }
+        else if let image = element as? Image {
+          if image.hash == data.hexString {
+            note?.body[index] = Image(hash: image.hash, width: image.width, heigth: image.heigth, alt: image.alt, data: data)
+
+          }
+        }
+      }
+      return true
+    }
+    return false
+  }
+
   func addTitle() -> Bool {
     if note != nil {
       if let content = elementContent {

@@ -27,6 +27,8 @@
 
 ** Status 
 
+*** Known Issues
+    - Dropped whitespaces in nested Markups (sometimes)
 *** Reader [14/16]
 
     - [X] Attachments
