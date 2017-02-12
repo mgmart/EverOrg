@@ -83,12 +83,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
           return
         }
       case .Note:
-        for (rawkey, strValue) in attributeDict {
-          switch rawkey {
-          default:
-            break
-          }
-        }
+        break
       case .Table:
         // Table Attributes are not usable within Org Mode
         tableContent = []
@@ -96,7 +91,6 @@ class EnmlParser: NSObject, XMLParserDelegate {
         rowContent = []
       case .TableField:
         fieldContent = []
-        
       case .Link:
         var link = (Link(target: nil, text: ""))
 
@@ -132,12 +126,6 @@ class EnmlParser: NSObject, XMLParserDelegate {
         elementStack.append(CheckItem(text: "", value: status))
       }
     } else if FormatType(rawValue: elementName) == nil {
-      for (rawkey, strValue) in attributeDict {
-        switch rawkey {
-        default:
-          break;
-        }
-      }
     }
   }
 
@@ -218,7 +206,7 @@ class EnmlParser: NSObject, XMLParserDelegate {
 
 
   func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
-    print("ParseError")
+    print("ENML parse error: \(parseError.localizedDescription)")
   }
 
   func parser(_ parser: XMLParser, foundCharacters string: String) {

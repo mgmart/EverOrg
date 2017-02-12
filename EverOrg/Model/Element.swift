@@ -212,23 +212,26 @@ struct Image: Media {
   var alt: String?
   var data: Data?
   var text: String
+  var type: String
 
-  init(hash: String, width: Int, heigth: Int, alt: String?) {
+  init(type: String, hash: String, width: Int, heigth: Int, alt: String?) {
     self.alt = alt
     self.hash = hash
     self.width = width
     self.heigth = heigth
     self.data = nil
     self.text = ""
+    self.type = type
   }
 
-  init(hash: String, width: Int, heigth: Int, alt: String?, data: Data?) {
+  init(type: String, hash: String, width: Int, heigth: Int, alt: String?, data: Data?) {
     self.hash = hash
     self.width = width
     self.heigth = heigth
     self.alt = alt
     self.data = data
     self.text = ""
+    self.type = type
   }
 
   var orgRepresentation: String {
@@ -244,20 +247,21 @@ struct Attachment: Media {
   var type: String
   var text: String
 
-  init(hash: String, data: Data?) {
+  init(type: String, hash: String, data: Data?) {
     self.hash = hash
     self.data = data
     self.type = ""
     self.text = ""
+    self.type = type
   }
 
-  init(hash: String) {
-    self.init(hash: hash, data: nil)
+  init(type: String, hash: String) {
+    self.init(type: type, hash: hash, data: nil)
   }
 
   var orgRepresentation: String {
     get {
-      return "\n[[ A T T A C H M E N T -- Please implement me]]\n"
+      return "\n[[./\(globalAttachmentPath)-Attachments/\(filename)][\(filename)]]\n"
     }
   }
 }

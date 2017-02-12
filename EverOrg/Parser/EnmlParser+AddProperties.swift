@@ -61,10 +61,10 @@ extension EnmlParser {
       if UTTypeConformsTo(mediaType, kUTTypeImage) {
         width = width != nil ? width : 0
         height = height != nil ? height : 0
-        let image = Image(hash: mediaHash, width: width!, heigth: height!, alt: alt)
+        let image = Image(type: mType, hash: mediaHash, width: width!, heigth: height!, alt: alt)
         addContent(element: image)
       } else {
-        let attachment = Attachment(hash: mediaHash)
+        let attachment = Attachment(type: mType, hash: mediaHash)
         addContent(element: attachment)
       }
       return true
