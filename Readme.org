@@ -3,7 +3,6 @@
   [[https://api.travis-ci.org/mgmart/EverOrg.png]]
 
 ** Objective 
-
 *** Migrate all content from Evernote to Org mode
 
     I'm a long term paying user of Evernote. I'm not happy with the
@@ -19,7 +18,25 @@
     of my content into xml. This project uses the Evernote
     backup-files to generate Org mode files. 
 
+** Features
+   EverOrg reads an Enex document and converts it's markup to Org mode
+   syntax. This could be done by using tools like pandoc. But then all
+   the attachments like images, voice-memos, scanned documents and so
+   on would be missing from within org mode. 
+
+   Evenrnote reads in the file which is given as a parameter and
+   creates an Org file with the same name in the same location as the
+   source file. In this location also an directory with the same name
+   is created where all the attachments are stored. 
+
+   [[./docs/images/directorypath.png]]
+
+   Every stored attachment is referenced from within the Org document,
+   either as an image which could be viewed inline or as an link so
+   that the attachment could be opened easily within n external application.
+
 ** Platform
+
    
     EverOrg is developed in Swift on MacOS. The aim is that EverOrg is
     platform independable so that Windows users have at least the
@@ -41,7 +58,6 @@
     - Note content is not formatted for the use within Org
       mode. =fill-paragraph= (=M-q=) should do the job whilst
       accessing the note in Org mode.
-
 
 ** Discussion
 
