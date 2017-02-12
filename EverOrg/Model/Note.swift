@@ -58,32 +58,36 @@ struct Note {
   var attributes: Attributes
   var body: [Element] = []
   var tags: [String] = []
+  var fileName: String?
 
   init() {
     title = ""
     attributes = Attributes()
   }
 
-  func printer() {
-    print("\n* \(title)")
-    for element in body {
-      print(element.orgRepresentation, terminator: "")
-    }
-  }
-
   var orgRepresentation: String {
     var cont = "\n* \(title)"
     if tags.count > 0 {
-      cont += "                "
+      cont += "                :"
       for tag in tags {
-        cont += ":\(tag): "
+        cont += "\(tag):"
       }
     }
     cont += "\n"
-    cont += ":PROPERTIES:\n\(attributes.orgRepresentation)\n:END:"
+    cont += ":PROPERTIES:\n\(attributes.orgRepresentation):END:\n"
     for element in body {
       cont += element.orgRepresentation
     }
     return cont
+  }
+
+  func detachAttachments(to: URL) {
+
+    for element in body {
+      if let media = element as? Media {
+        //        FileManager.default.createFile(atPath: to.absoluteString.removingPercentEncoding!, contents: media.data, attributes: nil)
+       try! media.data?.write(to: to.appendingPathComponent(media.filename ))
+      }
+    }
   }
 }

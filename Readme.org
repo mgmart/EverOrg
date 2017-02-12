@@ -29,36 +29,26 @@
 
 *** Known Issues
     - Dropped whitespaces in nested Markups (sometimes)
-*** Reader [14/16]
+    - Web clips are not nicely displayed in Org
+      - tables have still some linebreaks in table cells
+    - Only local images are processed. Remote images are ingnored
+    - Illegal characters in tags (for Org) are not filtered
+    - Lists are not processed (I do not have many of them)
+    - Reminders are not processed (Those are still in RTM for me)
+    - Very rarely a complex webclip could lead to unrecoverable parse
+      errors. In this case no Org file is written. Removing the
+      responsible note could resolve this issue temporarely.
+    - Note content is not formatted for the use within Org
+      mode. =fill-paragraph= (=M-q=) should do the job whilst
+      accessing the note in Org mode.
 
-    - [X] Attachments
-    - [X] Images
-    - [X] Title
-    - [X] Geodata
-    - [X] Author
-    - [X] Plaintext
-    - [X] Tables
-    - [X] Checklists
-    - [ ] Lists
-    - [ ] Reminders
-    - [X] Headings
-    - [X] Tags
-    - [X] Links
-    - [X] Markup
-    - [X] Created
-    - [X] Updated
 
-*** Writer [4/8]
+** Discussion
 
-   - [X] Headlines
-   - [X] Properties
-   - [ ] Attachments
-   - [ ] Scheduled
-   - [ ] Lists
-   - [X] Links
-   - [X] Tags
-   - [ ] Images
-
+*** Properties
+    I do not know if there are already any existing keywords used for
+    the properties I've been using for EverOrg. But if there are,
+    those could be easily adopted.
 
 ** License
 

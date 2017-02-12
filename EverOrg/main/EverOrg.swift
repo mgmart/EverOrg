@@ -22,6 +22,10 @@
 
 import Foundation
 
+// FIXME: 🦄
+var globalAttachmentPath = ""
+
+
 enum OptionType: String {
   case inputFile = "i"
   case help = "h"
@@ -56,14 +60,17 @@ struct EverOrg {
       } else {
         let fileName = CommandLine.arguments[2]
         let url = URL(fileURLWithPath: fileName)
+        let outUrl = url.deletingPathExtension()
+        globalAttachmentPath = outUrl.lastPathComponent
+
         let xmlParser = XMLParser(contentsOf: url)
         let enexParser = EnexParser()
+
         xmlParser?.delegate = enexParser
         xmlParser?.shouldResolveExternalEntities = true
         xmlParser?.parse()
-        for note in enexParser.notes {
-          print(note.orgRepresentation)
-        }
+
+        enexParser.writeOrgFile(to: outUrl)
       }
     case .help:
       ConsoleIO.printUsage()

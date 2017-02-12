@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		740FBFD21E4F806500739808 /* EnexOrgWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740FBFD11E4F806500739808 /* EnexOrgWriter.swift */; };
+		740FBFD41E4FBB3B00739808 /* EnexOrgWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740FBFD11E4F806500739808 /* EnexOrgWriter.swift */; };
 		744EF0491E47202300DB1E81 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF0481E47202300DB1E81 /* Element.swift */; };
 		744EF04D1E47220700DB1E81 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04A1E47220700DB1E81 /* ConsoleIO.swift */; };
 		744EF04E1E47220700DB1E81 /* EverOrg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EF04B1E47220700DB1E81 /* EverOrg.swift */; };
@@ -279,6 +280,7 @@
 				744EF05D1E472D4D00DB1E81 /* EverOrgTests.swift in Sources */,
 				744EF0661E47824E00DB1E81 /* Note.swift in Sources */,
 				747451791E48F17100D18E18 /* Data+Extension.swift in Sources */,
+				740FBFD41E4FBB3B00739808 /* EnexOrgWriter.swift in Sources */,
 				744EF06D1E47825D00DB1E81 /* EnmlParser.swift in Sources */,
 				744EF0681E47825D00DB1E81 /* Element.swift in Sources */,
 				7474518B1E49B7E300D18E18 /* EnmlParser+AddProperties.swift in Sources */,

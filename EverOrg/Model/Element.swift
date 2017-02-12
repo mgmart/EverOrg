@@ -203,6 +203,23 @@ struct TableField: Element {
 protocol Media: Element {
   var hash: String {get set}
   var data: Data? {get set}
+  var type: String {get set}
+}
+
+extension Media {
+  var filename:String {
+
+    let tagClass = kUTTagClassMIMEType
+    if let type = UTTypeCreatePreferredIdentifierForTag(tagClass,
+                                                        type as CFString,
+                                                        nil)?.takeRetainedValue()  {
+
+      if let fileExt = UTTypeCopyPreferredTagWithClass(type, kUTTagClassFilenameExtension)?.takeRetainedValue() {
+        return "\(hash).\(fileExt)"
+      }
+    }
+    return hash
+  }
 }
 
 struct Image: Media {
@@ -236,7 +253,7 @@ struct Image: Media {
 
   var orgRepresentation: String {
     get {
-      return "\n[[ I M A G E -- Please implement me]]\n"
+      return "\n[[./\(globalAttachmentPath)-Attachments/\(filename)]]\n"
     }
   }
 }
