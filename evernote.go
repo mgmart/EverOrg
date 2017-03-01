@@ -39,6 +39,7 @@ type Note struct {
 	} `xml:"note-attributes"`
 
 	Resource struct {
+		Mime string `xml:"mime"`
 		Data struct {
 			Content  string `xml:",chardata"`
 			Encoding string `xml:"encoding,attr"`
