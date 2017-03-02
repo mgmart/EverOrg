@@ -69,24 +69,37 @@ func (nodes Nodes) orgFormat() string {
 
 	value := ""
 	header := 0
+	table := 0
+	list := 0
+	listValue := []int{}
 
 	for _, node := range nodes {
 		switch node.Token.Type {
 
 		case html.SelfClosingTagToken:
-			mimeType := getAttr("type", node.Token)
-			ext, err := mime.ExtensionsByType(mimeType)
-			if err == nil {
-				fileExt := ""
-				if len(ext) > 0 {
-					fileExt = ext[0]
-				} else {
-					fileExt = ".unknwn"
+			switch node.Token.Data {
+			case "en-media":
+				mimeType := getAttr("type", node.Token)
+				ext, err := mime.ExtensionsByType(mimeType)
+				if err == nil {
+					fileExt := ""
+					if len(ext) > 0 {
+						fileExt = ext[0]
+					} else {
+						fileExt = ".unknwn"
+					}
+					value += "[[./" + filepath.Base(attachmentPath) + "/"
+					value += getAttr("hash", node.Token) + fileExt + "]]"
 				}
-				value += "[[./" + filepath.Base(attachmentPath) + "/"
-				value += getAttr("hash", node.Token) + fileExt + "]]"
-			}
+			case "en-todo":
 
+				switch getAttr("checked", node.Token) {
+				case "true":
+					value += "\n- [X] "
+				case "false":
+					value += "\n- [ ] "
+				}
+			}
 		case html.StartTagToken:
 			switch node.Token.Data {
 
@@ -100,22 +113,85 @@ func (nodes Nodes) orgFormat() string {
 				value += "_"
 			case "i":
 				value += "/"
-			case "b":
+			case "b", "strong", "em":
 				value += "*"
+			case "del":
+				value += "+"
 			case "h1":
-				value += "** "
+				value += "\n** "
 				header += 1
 			case "h2":
-				value += "*** "
+				value += "\n*** "
 				header += 1
 			case "h3":
-				value += "**** "
+				value += "\n**** "
 				header += 1
-			case "span", "tr", "tbody", "table":
+			case "h4":
+				value += "\n***** "
+				header += 1
+			case "h5":
+				value += "\n****** "
+				header += 1
+			case "h6":
+				value += "\n******* "
+				header += 1
+
+			case "div", "span", "tr", "tbody", "abbr", "th", "thead", "ins", "img":
 				break
+			case "sup", "small", "br", "dl", "dd", "dt", "font", "colgroup", "cite":
+				break
+			case "address", "s", "map", "area", "center":
+				break
+
+			case "hr":
+				value += "\n------\n"
+			case "en-media":
+				mimeType := getAttr("type", node.Token)
+				ext, err := mime.ExtensionsByType(mimeType)
+				if err == nil {
+					fileExt := ""
+					if len(ext) > 0 {
+						fileExt = ext[0]
+					} else {
+						fileExt = ".unknwn"
+					}
+					value += ("[[./" + filepath.Base(attachmentPath) + "/")
+					value += (getAttr("hash", node.Token) + fileExt + "]]")
+				}
+
+			case "table":
+				table += 1
 			case "td":
 				value += "|"
+			case "ol":
+				list += 1
+				listValue = append(listValue, 1)
+			case "ul":
+				list += 1
+				listValue = append(listValue, 0)
+			case "li":
+				value += "\n"
+				for i := 0; i <= list; i++ {
+					value += "  "
+				}
+				if list > 0 {
+					switch listValue[list-1] {
+					case 0:
+						value += "- "
+					default:
+						value += fmt.Sprintf("%d.", listValue[list-1])
+						listValue[list-1] = listValue[list-1] + 1
+					}
+				}
+			case "code":
+				value += "~"
+			case "pre":
+				value += "\n#+BEGIN_SRC\n"
+			case "blockquote":
+				value += "\n#+BEGIN_QUOTE\n"
+
 			default:
+				println(node.Token.Data)
 				break
 			}
 
@@ -125,20 +201,30 @@ func (nodes Nodes) orgFormat() string {
 				value += "_"
 			case "i":
 				value += "/"
-			case "b":
+			case "b", "strong", "em":
 				value += "*"
+			case "del":
+				value += "+"
 			case "a":
 				if header == 0 {
 					value += "]]"
 				}
-			case "h1":
+			case "h1", "h2", "h3", "h4", "h5", "h6":
 				header -= 1
-			case "h2":
-				header -= 1
-			case "h3":
-				header -= 1
+			case "table":
+				table -= 1
 			case "tr":
 				value += "|\n"
+			case "ol", "ul":
+				list -= 1
+				listValue = listValue[:len(listValue)-1]
+			case "code":
+				value += "~"
+			case "pre":
+				value += "\n#+END_SRC\n"
+			case "blockquote":
+				value += "\n#+END_QUOTE\n"
+
 			}
 		}
 		value += node.Text
@@ -165,15 +251,14 @@ func parseHtml(r io.Reader) Nodes {
 
 			switch token.Data {
 
-			case "div", "en-note":
+			case "en-note":
 				break
 			default:
-				//				println("stt", token.Data)
 				nodes = append(nodes, Node{token, ""})
 			}
 
 		case html.TextToken:
-			nodes = append(nodes, Node{html.Token{}, tokenValue})
+			nodes = append(nodes, Node{html.Token{}, html.UnescapeString(tokenValue)})
 
 		case html.EndTagToken:
 			nodes = append(nodes, Node{token, ""})
@@ -195,7 +280,7 @@ func main() {
 	var svar string
 	flag.StringVar(&svar, "svar", "bar", "a string var")
 	flag.Parse()
-	fmt.Println("word:", *wordPtr)
+	fmt.Println("input:", *wordPtr)
 
 	// Open the file given at commandline
 	readFile = *wordPtr
@@ -229,11 +314,9 @@ func main() {
 		reader := bytes.NewReader(cdata)
 		nodes := parseHtml(reader)
 
-		_, _ = f.WriteString("* " + note.Title + "\n")
-		_, _ = f.WriteString(nodes.orgFormat())
-
+		f.WriteString(note.orgProperties())
+		f.WriteString(nodes.orgFormat())
 		f.Sync()
-
 		if note.Resource.Data.Encoding == "base64" {
 			h := md5.New()
 			sDec, _ := b64.StdEncoding.DecodeString(note.Resource.Data.Content)
@@ -251,4 +334,42 @@ func main() {
 			}
 		}
 	}
+}
+
+func (note Note) orgProperties() string {
+	result := ""
+	attr := note.Attributes
+
+	result += "\n* " + note.Title // + "\n"
+
+	if len(note.Tags) > 0 {
+		result += "       "
+		for _, tag := range note.Tags {
+			result += ":" + tag
+		}
+		result += ":"
+	}
+	result += "\n"
+
+	result += ":PROPERTIES:\n"
+	if attr.Author != "" {
+		result += ":AUTHOR: " + attr.Author + "\n"
+	}
+	if note.Created != "" {
+		result += ":EVNT_CREATED: " + note.Created + "\n"
+		result += ":EVNT_UPDATED: " + note.Updated + "\n"
+	}
+	if attr.Latitude > 0 {
+		result += fmt.Sprintf(":GEO_LAT: %f\n", attr.Latitude)
+		result += fmt.Sprintf(":GEO_LON: %f\n", attr.Longitude)
+	}
+	if attr.Source != "" {
+		result += ":EVNT_SOURCE: " + attr.Source + "\n"
+	}
+	if attr.SourceUrl != "" {
+		result += ":EVNT_SOURCEURL: " + attr.SourceUrl + "\n"
+	}
+
+	result += ":END:\n"
+	return result
 }

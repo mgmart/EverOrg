@@ -27,15 +27,18 @@ type Query struct {
 }
 
 type Note struct {
-	Title      string `xml:"title"`
-	Content    string `xml:"content"`
-	Created    string `xml:"created"`
-	Updated    string `xml:"updated"`
+	Title      string   `xml:"title"`
+	Content    string   `xml:"content"`
+	Created    string   `xml:"created"`
+	Updated    string   `xml:"updated"`
+	Tags       []string `xml:"tag"`
 	Attributes struct {
 		Author    string  `xml:"author"`
 		Latitude  float64 `xml:"latitude"`
 		Longitude float64 `xml:"longitude"`
 		Altitude  float64 `xml:"altitude"`
+		Source    string  `xml:"source"`
+		SourceUrl string  `xml:"source-url"`
 	} `xml:"note-attributes"`
 
 	Resource struct {
