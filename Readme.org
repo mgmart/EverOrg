@@ -34,11 +34,13 @@
 ** Platform
 
     The first version of EverOrg was developed in Swift on MacOS. The aim is
-    that EverOrg is platform in dependable so that Windows users would have had
-    at least the possibility to use it in a VM under Linux. Unfortunately Swift
+    that EverOrg is platform independent so that Windows users would have had
+    at least the option to use it in a VM under Linux. Unfortunately Swift
     under Linux does not work straightforward. I was not able to compile EverOrg
     on Linux without strange errors. Due to that I decided to write it again
     using Go which has extraordinary cross-compile possibilities.
+
+    Binary files are available in [[https://github.com/mgmart/EverOrg/releases][Releases]].
 
 ** Status 
 
