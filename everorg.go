@@ -40,21 +40,12 @@ import (
 	"golang.org/x/net/html"
 )
 
+// Globals for filehandling
 var readFile = ""
 var attFolderExt = "-Attachments"
 var attachmentPath = ""
 
-func (s Note) String() string {
-	return fmt.Sprintf("-> %s - %f\n", s.Title, s.Attributes.Latitude)
-}
-
-type Node struct {
-	Token html.Token
-	Text  string
-}
-
-type Nodes []Node
-
+// Get Attributes for html tag
 func getAttr(attribute string, token html.Token) string {
 	for _, attr := range token.Attr {
 		if attr.Key == attribute {
@@ -65,6 +56,23 @@ func getAttr(attribute string, token html.Token) string {
 	return ""
 }
 
+func mimeFiles(token html.Token) (string, string) {
+
+	mimeType := getAttr("type", token)
+	ext, err := mime.ExtensionsByType(mimeType)
+	if err == nil {
+		fileExt := ""
+		if len(ext) > 0 {
+			fileExt = ext[0]
+		} else {
+			fileExt = ".unknwn"
+		}
+		return filepath.Base(attachmentPath), getAttr("hash", token) + fileExt
+	}
+	return "", ""
+}
+
+// Org mode represantation of Node
 func (nodes Nodes) orgFormat() string {
 
 	value := ""
@@ -79,18 +87,10 @@ func (nodes Nodes) orgFormat() string {
 		case html.SelfClosingTagToken:
 			switch node.Token.Data {
 			case "en-media":
-				mimeType := getAttr("type", node.Token)
-				ext, err := mime.ExtensionsByType(mimeType)
-				if err == nil {
-					fileExt := ""
-					if len(ext) > 0 {
-						fileExt = ext[0]
-					} else {
-						fileExt = ".unknwn"
-					}
-					value += "[[./" + filepath.Base(attachmentPath) + "/"
-					value += getAttr("hash", node.Token) + fileExt + "]]"
-				}
+				base, file := mimeFiles(node.Token)
+				value += "[[./" + base + "/"
+				value += file + "]]"
+
 			case "en-todo":
 
 				switch getAttr("checked", node.Token) {
@@ -104,6 +104,7 @@ func (nodes Nodes) orgFormat() string {
 			switch node.Token.Data {
 
 			case "a":
+				// We do not want links in the header
 				if header == 0 {
 					value += "[[" + getAttr("href", node.Token) + "]["
 				}
@@ -136,6 +137,7 @@ func (nodes Nodes) orgFormat() string {
 				value += "\n******* "
 				header += 1
 
+				// These tags are ignored
 			case "div", "span", "tr", "tbody", "abbr", "th", "thead", "ins", "img":
 				break
 			case "sup", "small", "br", "dl", "dd", "dt", "font", "colgroup", "cite":
@@ -146,19 +148,9 @@ func (nodes Nodes) orgFormat() string {
 			case "hr":
 				value += "\n------\n"
 			case "en-media":
-				mimeType := getAttr("type", node.Token)
-				ext, err := mime.ExtensionsByType(mimeType)
-				if err == nil {
-					fileExt := ""
-					if len(ext) > 0 {
-						fileExt = ext[0]
-					} else {
-						fileExt = ".unknwn"
-					}
-					value += ("[[./" + filepath.Base(attachmentPath) + "/")
-					value += (getAttr("hash", node.Token) + fileExt + "]]")
-				}
-
+				base, file := mimeFiles(node.Token)
+				value += "[[./" + base + "/"
+				value += file + "]]"
 			case "table":
 				table += 1
 			case "td":

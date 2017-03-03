@@ -22,9 +22,22 @@
 
 package main
 
+import "golang.org/x/net/html"
+
+//
+// Data Structures
+//
+
 type Query struct {
 	Notes []Note `xml:"note"`
 }
+
+type Node struct {
+	Token html.Token
+	Text  string
+}
+
+type Nodes []Node
 
 type Note struct {
 	Title      string   `xml:"title"`
@@ -48,7 +61,6 @@ type Note struct {
 			Encoding string `xml:"encoding,attr"`
 		} `xml:"data"`
 	} `xml:"resource"`
-	// Keywords map[string]bool
 }
 
 type Content struct {
