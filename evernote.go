@@ -54,7 +54,7 @@ type Note struct {
 		SourceUrl string  `xml:"source-url"`
 	} `xml:"note-attributes"`
 
-	Resource struct {
+	Resource []struct {
 		Mime string `xml:"mime"`
 		Data struct {
 			Content  string `xml:",chardata"`

@@ -290,11 +290,11 @@ func main() {
 	}
 
 	defer xmlFile.Close()
-
 	b, _ := ioutil.ReadAll(xmlFile)
 
 	var q Query
 	xml.Unmarshal(b, &q)
+
 	// Parse the contained xml
 	orgFile := strings.TrimSuffix(readFile, filepath.Ext(readFile)) + ".org"
 	f, err := os.Create(orgFile)
@@ -309,20 +309,22 @@ func main() {
 		f.WriteString(note.orgProperties())
 		f.WriteString(nodes.orgFormat())
 		f.Sync()
-		if note.Resource.Data.Encoding == "base64" {
-			h := md5.New()
-			sDec, _ := b64.StdEncoding.DecodeString(note.Resource.Data.Content)
-			h.Write(sDec)
-			filename := hex.EncodeToString(h.Sum(nil))
-			ext, err := mime.ExtensionsByType(note.Resource.Mime)
-			if err == nil {
-				fileExt := ""
-				if len(ext) > 0 {
-					fileExt = ext[0]
-				} else {
-					fileExt = ".unknwn"
+		for _, attachment := range note.Resource {
+			if attachment.Data.Encoding == "base64" {
+				h := md5.New()
+				sDec, _ := b64.StdEncoding.DecodeString(attachment.Data.Content)
+				h.Write(sDec)
+				filename := hex.EncodeToString(h.Sum(nil))
+				ext, err := mime.ExtensionsByType(attachment.Mime)
+				if err == nil {
+					fileExt := ""
+					if len(ext) > 0 {
+						fileExt = ext[0]
+					} else {
+						fileExt = ".unknwn"
+					}
+					_ = ioutil.WriteFile(attachmentPath+"/"+filename+fileExt, sDec, 0644)
 				}
-				_ = ioutil.WriteFile(attachmentPath+"/"+filename+fileExt, sDec, 0644)
 			}
 		}
 	}
