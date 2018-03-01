@@ -31,6 +31,16 @@
    either as an image which could be viewed inline or as an link so
    that the attachment could be opened easily within n external application.
 
+** Usage
+   Export notebooks from Evernote to ENEX files, and then convert them to
+   org-mode with this command:
+
+   #+BEGIN_SRC
+   everorg --input notebook.enex
+   #+END_SRC
+
+   The output is a .org file and a folder with attachments.
+
 ** Platform
 
     The first version of EverOrg was developed in Swift on MacOS. The aim is
