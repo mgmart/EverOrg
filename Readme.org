@@ -11,7 +11,7 @@
     stuff fully over to Org mode.
 
     One of the reasons of using Evernote was the possibility to export all
-    of my content into XML. This EverOrg uses the Evernote
+    of it's content into XML. EverOrg uses these Evernote
     backup-files to generate Org mode files. 
 
 ** Features
@@ -29,7 +29,7 @@
 
    Every stored attachment is referenced from within the Org document,
    either as an image which could be viewed inline or as an link so
-   that the attachment could be opened easily within n external application.
+   that the attachment could be opened easily within an external application.
 
 ** Usage
    Export notebooks from Evernote to ENEX files, and then convert them to
