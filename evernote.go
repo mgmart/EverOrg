@@ -58,13 +58,16 @@ type Note struct {
 		SourceUrl string  `xml:"source-url"`
 	} `xml:"note-attributes"`
 
-	Resource []struct {
-		Mime string `xml:"mime"`
-		Data struct {
-			Content  string `xml:",chardata"`
-			Encoding string `xml:"encoding,attr"`
-		} `xml:"data"`
-	} `xml:"resource"`
+	Resources []Resource `xml:"resource"`
+}
+
+// Resource ...
+type Resource struct {
+	Mime string `xml:"mime"`
+	Data struct {
+		Content  string `xml:",chardata"`
+		Encoding string `xml:"encoding,attr"`
+	} `xml:"data"`
 }
 
 // Content ...

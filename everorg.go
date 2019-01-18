@@ -43,8 +43,11 @@ import (
 // Globals for filehandling
 var (
 	readFile       = ""
-	attFolderExt   = "-Attachments"
+	attFolderExt   = "-attachments"
 	attachmentPath = ""
+
+	isMerged  bool
+	isShowAll bool
 )
 
 // Get Attributes for html tag
@@ -63,7 +66,7 @@ func mimeFiles(token html.Token) (string, string) {
 	mimeType := getAttr("type", token)
 	ext, err := mime.ExtensionsByType(mimeType)
 	if err == nil {
-		fileExt := ""
+		var fileExt string
 		if len(ext) > 0 {
 			fileExt = ext[0]
 		} else {
@@ -77,8 +80,7 @@ func mimeFiles(token html.Token) (string, string) {
 // Org mode represantation of Node
 func (nodes Nodes) orgFormat() string {
 
-	value := ""
-	// TODO: use string.Buffer
+	var value strings.Builder
 	header := 0
 	table := 0
 	list := 0
@@ -91,16 +93,16 @@ func (nodes Nodes) orgFormat() string {
 			switch node.Token.Data {
 			case "en-media":
 				base, file := mimeFiles(node.Token)
-				value += "[[./" + base + "/"
-				value += file + "]]"
+				value.WriteString("[[./" + base + "/")
+				value.WriteString(file + "]]")
 
 			case "en-todo":
 
 				switch getAttr("checked", node.Token) {
 				case "true":
-					value += "\n- [X] "
+					value.WriteString("\n- [X] ")
 				case "false":
-					value += "\n- [ ] "
+					value.WriteString("\n- [ ] ")
 				}
 			}
 		case html.StartTagToken:
@@ -109,35 +111,35 @@ func (nodes Nodes) orgFormat() string {
 			case "a":
 				// We do not want links in the header
 				if header == 0 {
-					value += "[[" + getAttr("href", node.Token) + "]["
+					value.WriteString("[[" + getAttr("href", node.Token) + "][")
 				}
 			case "p":
-				value += "\n"
+				value.WriteString("\n")
 			case "u":
-				value += "_"
+				value.WriteString("_")
 			case "i":
-				value += "/"
+				value.WriteString("/")
 			case "b", "strong", "em":
-				value += "*"
+				value.WriteString("*")
 			case "del":
-				value += "+"
+				value.WriteString("+")
 			case "h1":
-				value += "\n** "
+				value.WriteString("\n** ")
 				header++
 			case "h2":
-				value += "\n*** "
+				value.WriteString("\n*** ")
 				header++
 			case "h3":
-				value += "\n**** "
+				value.WriteString("\n**** ")
 				header++
 			case "h4":
-				value += "\n***** "
+				value.WriteString("\n***** ")
 				header++
 			case "h5":
-				value += "\n****** "
+				value.WriteString("\n****** ")
 				header++
 			case "h6":
-				value += "\n******* "
+				value.WriteString("\n******* ")
 				header++
 
 				// These tags are ignored
@@ -149,15 +151,15 @@ func (nodes Nodes) orgFormat() string {
 				break
 
 			case "hr":
-				value += "\n------\n"
+				value.WriteString("\n------\n")
 			case "en-media":
 				base, file := mimeFiles(node.Token)
-				value += "[[./" + base + "/"
-				value += file + "]]"
+				value.WriteString("[[./" + base + "/")
+				value.WriteString(file + "]]")
 			case "table":
 				table++
 			case "td":
-				value += "|"
+				value.WriteString("|")
 			case "ol":
 				list++
 				listValue = append(listValue, 1)
@@ -165,25 +167,25 @@ func (nodes Nodes) orgFormat() string {
 				list++
 				listValue = append(listValue, 0)
 			case "li":
-				value += "\n"
+				value.WriteString("\n")
 				for i := 0; i <= list; i++ {
-					value += "  "
+					value.WriteString("  ")
 				}
 				if list > 0 {
 					switch listValue[list-1] {
 					case 0:
-						value += "- "
+						value.WriteString("- ")
 					default:
-						value += fmt.Sprintf("%d.", listValue[list-1])
+						value.WriteString(fmt.Sprintf("%d.", listValue[list-1]))
 						listValue[list-1] = listValue[list-1] + 1
 					}
 				}
 			case "code":
-				value += "~"
+				value.WriteString("~")
 			case "pre":
-				value += "\n#+BEGIN_SRC\n"
+				value.WriteString("\n#+BEGIN_SRC\n")
 			case "blockquote":
-				value += "\n#+BEGIN_QUOTE\n"
+				value.WriteString("\n#+BEGIN_QUOTE\n")
 
 			default:
 				println(node.Token.Data)
@@ -193,38 +195,38 @@ func (nodes Nodes) orgFormat() string {
 		case html.EndTagToken:
 			switch node.Token.Data {
 			case "u":
-				value += "_"
+				value.WriteString("_")
 			case "i":
-				value += "/"
+				value.WriteString("/")
 			case "b", "strong", "em":
-				value += "*"
+				value.WriteString("*")
 			case "del":
-				value += "+"
+				value.WriteString("+")
 			case "a":
 				if header == 0 {
-					value += "]]"
+					value.WriteString("]]")
 				}
 			case "h1", "h2", "h3", "h4", "h5", "h6":
 				header--
 			case "table":
 				table--
 			case "tr":
-				value += "|\n"
+				value.WriteString("|\n")
 			case "ol", "ul":
 				list--
 				listValue = listValue[:len(listValue)-1]
 			case "code":
-				value += "~"
+				value.WriteString("~")
 			case "pre":
-				value += "\n#+END_SRC\n"
+				value.WriteString("\n#+END_SRC\n")
 			case "blockquote":
-				value += "\n#+END_QUOTE\n"
+				value.WriteString("\n#+END_QUOTE\n")
 
 			}
 		}
-		value += node.Text
+		value.WriteString(node.Text)
 	}
-	return value
+	return value.String()
 }
 
 func parseHtml(r io.Reader) Nodes {
@@ -272,9 +274,13 @@ func main() {
 
 	// Commandline stuff
 	wordPtr := flag.String("input", "enex File", "relative path to enex file")
-	var svar string
-	flag.StringVar(&svar, "svar", "bar", "a string var")
+
+	flag.BoolVar(&isMerged, "merge", false, "merge notes to single file")
+	flag.BoolVar(&isShowAll, "showAll", true, "show all headers in org files at startup")
 	flag.Parse()
+	if wordPtr == nil || *wordPtr == "" {
+		panic("input file is missing")
+	}
 	fmt.Println("input:", *wordPtr)
 
 	// Open the file given at commandline
@@ -300,9 +306,10 @@ func main() {
 
 	// Parse the contained xml
 	orgFile := strings.TrimSuffix(readFile, filepath.Ext(readFile)) + ".org"
-	f, err := os.Create(orgFile)
+	f, _ := os.Create(orgFile)
 	defer func() { _ = f.Close() }()
 
+	attachmentsCount := 0
 	for _, note := range q.Notes {
 
 		cdata := []byte(note.Content)
@@ -312,61 +319,93 @@ func main() {
 		f.WriteString(note.orgProperties())
 		f.WriteString(nodes.orgFormat())
 		f.Sync()
-		for _, attachment := range note.Resource {
+		for _, attachment := range note.Resources {
 			if attachment.Data.Encoding == "base64" {
-				h := md5.New()
-				sDec, _ := b64.StdEncoding.DecodeString(attachment.Data.Content)
-				h.Write(sDec)
-				filename := hex.EncodeToString(h.Sum(nil))
-				ext, err := mime.ExtensionsByType(attachment.Mime)
+				err = createAttachment(attachment, attachmentPath)
 				if err == nil {
-					fileExt := ""
-					if len(ext) > 0 {
-						fileExt = ext[0]
-					} else {
-						fileExt = ".unknwn"
-					}
-					_ = ioutil.WriteFile(attachmentPath+"/"+filename+fileExt, sDec, 0644)
+					attachmentsCount++
 				}
 			}
 		}
 	}
+
+	if attachmentsCount == 0 {
+		_ = os.Remove(attachmentPath)
+		// remove attachment directory
+		return
+	}
+
+	fmt.Printf("there are %d attachments", attachmentsCount)
+}
+
+func createAttachment(attachment Resource, attachmentPath string) error {
+	h := md5.New()
+	sDec, _ := b64.StdEncoding.DecodeString(attachment.Data.Content)
+	h.Write(sDec)
+	filename := hex.EncodeToString(h.Sum(nil))
+	ext, err := mime.ExtensionsByType(attachment.Mime)
+	if err != nil {
+		return err
+	}
+
+	var fileExt string
+	if len(ext) > 0 {
+		fileExt = ext[0]
+	} else {
+		fileExt = ".unknwn"
+	}
+	err = ioutil.WriteFile(attachmentPath+"/"+filename+fileExt, sDec, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 func (note Note) orgProperties() string {
-	result := ""
+	var result strings.Builder
 	attr := note.Attributes
 
-	result += "\n* " + note.Title // + "\n"
+	if isMerged {
+		result.WriteString("\n* " + note.Title)
+	} else {
+		result.WriteString("#+TITLE: " + note.Title + "\n")
+		if isShowAll {
+			result.WriteString("\n#+STARTUP: showall" + "\n")
+			result.WriteString("\n#+AUTHOR: " + attr.Author + "\n")
+
+		}
+	}
 
 	if len(note.Tags) > 0 {
-		result += "       "
+		result.WriteString("       ")
 		for _, tag := range note.Tags {
-			result += ":" + tag
+			result.WriteString(":" + tag)
 		}
-		result += ":"
+		result.WriteString(":")
 	}
-	result += "\n"
+	result.WriteString("\n")
 
-	result += ":PROPERTIES:\n"
+	result.WriteString(":PROPERTIES:\n")
 	if attr.Author != "" {
-		result += ":AUTHOR: " + attr.Author + "\n"
+		result.WriteString(":AUTHOR: " + attr.Author + "\n")
 	}
 	if note.Created != "" {
-		result += ":EVNT_CREATED: " + note.Created + "\n"
-		result += ":EVNT_UPDATED: " + note.Updated + "\n"
+		result.WriteString(":EVNT_CREATED: " + note.Created + "\n")
+		result.WriteString(":EVNT_UPDATED: " + note.Updated + "\n")
 	}
 	if attr.Latitude > 0 {
-		result += fmt.Sprintf(":GEO_LAT: %f\n", attr.Latitude)
-		result += fmt.Sprintf(":GEO_LON: %f\n", attr.Longitude)
+		result.WriteString(fmt.Sprintf(":GEO_LAT: %f\n", attr.Latitude))
+		result.WriteString(fmt.Sprintf(":GEO_LON: %f\n", attr.Longitude))
 	}
 	if attr.Source != "" {
-		result += ":EVNT_SOURCE: " + attr.Source + "\n"
+		result.WriteString(":EVNT_SOURCE: " + attr.Source + "\n")
 	}
 	if attr.SourceUrl != "" {
-		result += ":EVNT_SOURCEURL: " + attr.SourceUrl + "\n"
+		result.WriteString(":EVNT_SOURCEURL: " + attr.SourceUrl + "\n")
 	}
 
-	result += ":END:\n"
-	return result
+	result.WriteString(":END:\n")
+	return result.String()
 }
