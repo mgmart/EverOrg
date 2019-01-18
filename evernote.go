@@ -28,17 +28,21 @@ import "golang.org/x/net/html"
 // Data Structures
 //
 
+// Query ...
 type Query struct {
 	Notes []Note `xml:"note"`
 }
 
+// Node ...
 type Node struct {
 	Token html.Token
 	Text  string
 }
 
+// Nodes ...
 type Nodes []Node
 
+// Note ...
 type Note struct {
 	Title      string   `xml:"title"`
 	Content    string   `xml:"content"`
@@ -63,6 +67,7 @@ type Note struct {
 	} `xml:"resource"`
 }
 
+// Content ...
 type Content struct {
 	Spans []struct {
 		Media []struct {

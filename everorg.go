@@ -41,9 +41,11 @@ import (
 )
 
 // Globals for filehandling
-var readFile = ""
-var attFolderExt = "-Attachments"
-var attachmentPath = ""
+var (
+	readFile       = ""
+	attFolderExt   = "-Attachments"
+	attachmentPath = ""
+)
 
 // Get Attributes for html tag
 func getAttr(attribute string, token html.Token) string {
@@ -76,6 +78,7 @@ func mimeFiles(token html.Token) (string, string) {
 func (nodes Nodes) orgFormat() string {
 
 	value := ""
+	// TODO: use string.Buffer
 	header := 0
 	table := 0
 	list := 0
@@ -120,22 +123,22 @@ func (nodes Nodes) orgFormat() string {
 				value += "+"
 			case "h1":
 				value += "\n** "
-				header += 1
+				header++
 			case "h2":
 				value += "\n*** "
-				header += 1
+				header++
 			case "h3":
 				value += "\n**** "
-				header += 1
+				header++
 			case "h4":
 				value += "\n***** "
-				header += 1
+				header++
 			case "h5":
 				value += "\n****** "
-				header += 1
+				header++
 			case "h6":
 				value += "\n******* "
-				header += 1
+				header++
 
 				// These tags are ignored
 			case "div", "span", "tr", "tbody", "abbr", "th", "thead", "ins", "img":
@@ -152,14 +155,14 @@ func (nodes Nodes) orgFormat() string {
 				value += "[[./" + base + "/"
 				value += file + "]]"
 			case "table":
-				table += 1
+				table++
 			case "td":
 				value += "|"
 			case "ol":
-				list += 1
+				list++
 				listValue = append(listValue, 1)
 			case "ul":
-				list += 1
+				list++
 				listValue = append(listValue, 0)
 			case "li":
 				value += "\n"
@@ -202,13 +205,13 @@ func (nodes Nodes) orgFormat() string {
 					value += "]]"
 				}
 			case "h1", "h2", "h3", "h4", "h5", "h6":
-				header -= 1
+				header--
 			case "table":
-				table -= 1
+				table--
 			case "tr":
 				value += "|\n"
 			case "ol", "ul":
-				list -= 1
+				list--
 				listValue = listValue[:len(listValue)-1]
 			case "code":
 				value += "~"
@@ -289,7 +292,7 @@ func main() {
 		os.Mkdir(attachmentPath, 0711)
 	}
 
-	defer xmlFile.Close()
+	defer func() { _ = xmlFile.Close() }()
 	b, _ := ioutil.ReadAll(xmlFile)
 
 	var q Query
@@ -298,7 +301,7 @@ func main() {
 	// Parse the contained xml
 	orgFile := strings.TrimSuffix(readFile, filepath.Ext(readFile)) + ".org"
 	f, err := os.Create(orgFile)
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	for _, note := range q.Notes {
 
