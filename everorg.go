@@ -46,8 +46,7 @@ var (
 	attFolderExt   = "-attachments"
 	attachmentPath = ""
 
-	isMerged  bool
-	isShowAll bool
+	isMerged bool
 )
 
 // Get Attributes for html tag
@@ -145,9 +144,9 @@ func (nodes Nodes) orgFormat() string {
 				// These tags are ignored
 			case "div", "span", "tr", "tbody", "abbr", "th", "thead", "ins", "img":
 				break
-			case "sup", "small", "br", "dl", "dd", "dt", "font", "colgroup", "cite":
+			case "sup", "sub", "small", "br", "dl", "dd", "dt", "font", "colgroup", "cite":
 				break
-			case "address", "s", "map", "area", "center":
+			case "address", "s", "map", "area", "center", "q":
 				break
 
 			case "hr":
@@ -188,7 +187,7 @@ func (nodes Nodes) orgFormat() string {
 				value.WriteString("\n#+BEGIN_QUOTE\n")
 
 			default:
-				println(node.Token.Data)
+				fmt.Println("skip token: " + node.Token.Data)
 				break
 			}
 
@@ -229,7 +228,7 @@ func (nodes Nodes) orgFormat() string {
 	return value.String()
 }
 
-func parseHtml(r io.Reader) Nodes {
+func parseHTML(r io.Reader) Nodes {
 	var nodes Nodes
 	d := html.NewTokenizer(r)
 
@@ -271,12 +270,9 @@ func parseHtml(r io.Reader) Nodes {
 }
 
 func main() {
-
-	// Commandline stuff
 	wordPtr := flag.String("input", "enex File", "relative path to enex file")
 
 	flag.BoolVar(&isMerged, "merge", false, "whether to merge notes to single file")
-	flag.BoolVar(&isShowAll, "showAll", true, "show all headers in org files at startup")
 	flag.Parse()
 	if wordPtr == nil || *wordPtr == "" {
 		panic("input file is missing")
@@ -294,13 +290,21 @@ func main() {
 
 	defer func() { _ = xmlFile.Close() }()
 
-	currentDir, _ := filepath.Split(readFile)
-	fmt.Println(currentDir)
-	currentFilePathName := strings.TrimSuffix(readFile, filepath.Ext(readFile))
+	currentDir, fileName := filepath.Split(readFile)
+	ext := filepath.Ext(readFile)
+	baseName := strings.TrimSuffix(fileName, ext)
+
+	newWrittenDir := filepath.Join(currentDir, baseName)
+	// strings.TrimSuffix(readFile, ext)
+	if _, err = os.Stat(newWrittenDir); os.IsNotExist(err) {
+		os.Mkdir(newWrittenDir, 0711)
+	}
 
 	// Create Attachments Directory if not existent
+	currentFilePathName := filepath.Join(newWrittenDir, baseName)
+
 	attachmentPath = currentFilePathName + attFolderExt
-	if _, err := os.Stat(attachmentPath); os.IsNotExist(err) {
+	if _, err = os.Stat(attachmentPath); os.IsNotExist(err) {
 		os.Mkdir(attachmentPath, 0711)
 	}
 
@@ -309,34 +313,26 @@ func main() {
 	var q Query
 	xml.Unmarshal(b, &q)
 
-	var f os.File
+	var f *os.File
 	// Parse the contained xml
 	if isMerged {
-		orgFile := currentFilePathName + ".org"
-		f, _ := os.Create(orgFile)
+		f, err = os.Create(currentFilePathName + ".org")
+
+		fmt.Println("output: " + currentFilePathName + ".org")
+		if err != nil {
+			fmt.Errorf("err=%v", err)
+			return
+		}
 		defer func() { _ = f.Close() }()
 	}
 	attachmentsCount := 0
+	notesCount := 0
 
-	// 	var w sync.WaitGroup
-	// var errs []error
-	// errChan := make(chan error)
-	// go func() {
-	// 	for err := range errChan {
-	// 		errs = append(errs, err)
-	// 	}
-	// }()
 	for _, note := range q.Notes {
-		//		w.Add(1)
-		//	go func(f *zip.File) {
-		// w.Wait()
-		// close(errChan)
-		// if len(errs) > 0 {
-		// 	return errs[0] // return first error
-		// }
+
 		cdata := []byte(note.Content)
 		reader := bytes.NewReader(cdata)
-		nodes := parseHtml(reader)
+		nodes := parseHTML(reader)
 
 		if isMerged {
 			f.WriteString(note.orgProperties())
@@ -344,16 +340,16 @@ func main() {
 			f.Sync()
 		} else {
 			noteFileName := sanitize(note.Title) + "-" + note.Updated + ".org"
-			newFile, err := os.Create(filepath.Join(currentDir, noteFileName))
+			newFile, err := os.Create(filepath.Join(newWrittenDir, noteFileName))
 			if err != nil {
 				continue
 			}
-			//	fmt.Println(noteFileName)
 			newFile.WriteString(note.orgProperties())
 			newFile.WriteString(nodes.orgFormat())
 			_ = newFile.Close()
-
 		}
+
+		notesCount++
 		for _, attachment := range note.Resources {
 			if attachment.Data.Encoding == "base64" {
 				err = createAttachment(attachment, attachmentPath)
@@ -365,12 +361,12 @@ func main() {
 	}
 
 	if attachmentsCount == 0 {
-		_ = os.Remove(attachmentPath)
 		// remove attachment directory
+		_ = os.Remove(attachmentPath)
 		return
 	}
 
-	fmt.Printf("there are %d attachments", attachmentsCount)
+	fmt.Printf("\nThere are %d notes and %d attachments created", notesCount, attachmentsCount)
 }
 
 func sanitize(title string) string {
@@ -380,6 +376,8 @@ func sanitize(title string) string {
 	title = strings.Replace(title, "(", "", -1)
 	title = strings.Replace(title, ")", "", -1)
 	title = strings.Replace(title, ",", "", -1)
+	title = strings.Replace(title, "|", "", -1)
+	title = strings.Replace(title, "?", "", -1)
 
 	title = strings.Replace(title, " ", "-", -1)
 
@@ -417,43 +415,60 @@ func (note Note) orgProperties() string {
 
 	if isMerged {
 		result.WriteString("\n* " + note.Title)
+		if len(note.Tags) > 0 {
+			result.WriteString("       ")
+			for _, tag := range note.Tags {
+				result.WriteString(":" + tag)
+			}
+			result.WriteString(":")
+		}
+		result.WriteString("\n")
+
+		result.WriteString(":PROPERTIES:\n")
+		if attr.Author != "" {
+			result.WriteString(":AUTHOR: " + attr.Author + "\n")
+		}
+		if note.Created != "" {
+			result.WriteString(":EVNT_CREATED: " + note.Created + "\n")
+			result.WriteString(":EVNT_UPDATED: " + note.Updated + "\n")
+		}
+		if attr.Latitude > 0 {
+			result.WriteString(fmt.Sprintf(":GEO_LAT: %f\n", attr.Latitude))
+			result.WriteString(fmt.Sprintf(":GEO_LON: %f\n", attr.Longitude))
+		}
+		if attr.Source != "" {
+			result.WriteString(":EVNT_SOURCE: " + attr.Source + "\n")
+		}
+		if attr.SourceUrl != "" {
+			result.WriteString(":EVNT_SOURCEURL: " + attr.SourceUrl + "\n")
+		}
+
+		result.WriteString(":END:\n")
 	} else {
 		result.WriteString("#+TITLE: " + note.Title + "\n")
-		if isShowAll {
-			result.WriteString("#+STARTUP: showall" + "\n")
+		result.WriteString("#+STARTUP: showall" + "\n")
+
+		if attr.Author != "" {
 			result.WriteString("#+AUTHOR: " + attr.Author + "\n")
-
+		}
+		if len(note.Tags) > 0 {
+			result.WriteString("#+TAGS: ")
+			result.WriteString(strings.Join(note.Tags, " ") + "\n")
+		}
+		if note.Created != "" {
+			result.WriteString("#+DATE: " + note.Created + "\n")
+		}
+		if attr.Latitude > 0 {
+			result.WriteString(fmt.Sprintf("#+LAT: %f\n", attr.Latitude))
+			result.WriteString(fmt.Sprintf("#+LON: %f\n", attr.Longitude))
+		}
+		if attr.Source != "" {
+			result.WriteString("#+SOURCE: " + attr.Source + "\n")
+		}
+		if attr.SourceUrl != "" {
+			result.WriteString("#+DESCRIPTION: " + attr.SourceUrl + "\n")
 		}
 	}
 
-	if len(note.Tags) > 0 {
-		result.WriteString("       ")
-		for _, tag := range note.Tags {
-			result.WriteString(":" + tag)
-		}
-		result.WriteString(":")
-	}
-	result.WriteString("\n")
-
-	result.WriteString(":PROPERTIES:\n")
-	if attr.Author != "" {
-		result.WriteString(":AUTHOR: " + attr.Author + "\n")
-	}
-	if note.Created != "" {
-		result.WriteString(":EVNT_CREATED: " + note.Created + "\n")
-		result.WriteString(":EVNT_UPDATED: " + note.Updated + "\n")
-	}
-	if attr.Latitude > 0 {
-		result.WriteString(fmt.Sprintf(":GEO_LAT: %f\n", attr.Latitude))
-		result.WriteString(fmt.Sprintf(":GEO_LON: %f\n", attr.Longitude))
-	}
-	if attr.Source != "" {
-		result.WriteString(":EVNT_SOURCE: " + attr.Source + "\n")
-	}
-	if attr.SourceUrl != "" {
-		result.WriteString(":EVNT_SOURCEURL: " + attr.SourceUrl + "\n")
-	}
-
-	result.WriteString(":END:\n")
 	return result.String()
 }
