@@ -8,7 +8,6 @@ builds:
 - goos:
   - darwin
   - windows
-  - freebsd
   - linux
 archive:
   replacements:
