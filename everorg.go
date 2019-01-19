@@ -275,7 +275,7 @@ func main() {
 	// Commandline stuff
 	wordPtr := flag.String("input", "enex File", "relative path to enex file")
 
-	flag.BoolVar(&isMerged, "merge", false, "merge notes to single file")
+	flag.BoolVar(&isMerged, "merge", false, "whether to merge notes to single file")
 	flag.BoolVar(&isShowAll, "showAll", true, "show all headers in org files at startup")
 	flag.Parse()
 	if wordPtr == nil || *wordPtr == "" {
@@ -292,33 +292,68 @@ func main() {
 		return
 	}
 
+	defer func() { _ = xmlFile.Close() }()
+
+	currentDir, _ := filepath.Split(readFile)
+	fmt.Println(currentDir)
+	currentFilePathName := strings.TrimSuffix(readFile, filepath.Ext(readFile))
+
 	// Create Attachments Directory if not existent
-	attachmentPath = strings.TrimSuffix(readFile, filepath.Ext(readFile)) + attFolderExt
+	attachmentPath = currentFilePathName + attFolderExt
 	if _, err := os.Stat(attachmentPath); os.IsNotExist(err) {
 		os.Mkdir(attachmentPath, 0711)
 	}
 
-	defer func() { _ = xmlFile.Close() }()
 	b, _ := ioutil.ReadAll(xmlFile)
 
 	var q Query
 	xml.Unmarshal(b, &q)
 
+	var f os.File
 	// Parse the contained xml
-	orgFile := strings.TrimSuffix(readFile, filepath.Ext(readFile)) + ".org"
-	f, _ := os.Create(orgFile)
-	defer func() { _ = f.Close() }()
-
+	if isMerged {
+		orgFile := currentFilePathName + ".org"
+		f, _ := os.Create(orgFile)
+		defer func() { _ = f.Close() }()
+	}
 	attachmentsCount := 0
-	for _, note := range q.Notes {
 
+	// 	var w sync.WaitGroup
+	// var errs []error
+	// errChan := make(chan error)
+	// go func() {
+	// 	for err := range errChan {
+	// 		errs = append(errs, err)
+	// 	}
+	// }()
+	for _, note := range q.Notes {
+		//		w.Add(1)
+		//	go func(f *zip.File) {
+		// w.Wait()
+		// close(errChan)
+		// if len(errs) > 0 {
+		// 	return errs[0] // return first error
+		// }
 		cdata := []byte(note.Content)
 		reader := bytes.NewReader(cdata)
 		nodes := parseHtml(reader)
 
-		f.WriteString(note.orgProperties())
-		f.WriteString(nodes.orgFormat())
-		f.Sync()
+		if isMerged {
+			f.WriteString(note.orgProperties())
+			f.WriteString(nodes.orgFormat())
+			f.Sync()
+		} else {
+			noteFileName := sanitize(note.Title) + "-" + note.Updated + ".org"
+			newFile, err := os.Create(filepath.Join(currentDir, noteFileName))
+			if err != nil {
+				continue
+			}
+			//	fmt.Println(noteFileName)
+			newFile.WriteString(note.orgProperties())
+			newFile.WriteString(nodes.orgFormat())
+			_ = newFile.Close()
+
+		}
 		for _, attachment := range note.Resources {
 			if attachment.Data.Encoding == "base64" {
 				err = createAttachment(attachment, attachmentPath)
@@ -336,6 +371,19 @@ func main() {
 	}
 
 	fmt.Printf("there are %d attachments", attachmentsCount)
+}
+
+func sanitize(title string) string {
+	title = strings.TrimSpace(strings.ToLower(title))
+	title = strings.Replace(title, "-", "", -1)
+	title = strings.Replace(title, "'", "", -1)
+	title = strings.Replace(title, "(", "", -1)
+	title = strings.Replace(title, ")", "", -1)
+	title = strings.Replace(title, ",", "", -1)
+
+	title = strings.Replace(title, " ", "-", -1)
+
+	return title
 }
 
 func createAttachment(attachment Resource, attachmentPath string) error {
@@ -372,8 +420,8 @@ func (note Note) orgProperties() string {
 	} else {
 		result.WriteString("#+TITLE: " + note.Title + "\n")
 		if isShowAll {
-			result.WriteString("\n#+STARTUP: showall" + "\n")
-			result.WriteString("\n#+AUTHOR: " + attr.Author + "\n")
+			result.WriteString("#+STARTUP: showall" + "\n")
+			result.WriteString("#+AUTHOR: " + attr.Author + "\n")
 
 		}
 	}
