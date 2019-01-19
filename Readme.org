@@ -29,10 +29,10 @@
    is created where all the attachments are stored. 
    
   #+BEGIN_EXAMPLE
-Input file: common.enex
-Output file: 
- - merge=true: common/common.org 
- - merge=false: common/*.org and common/common-attachments
+   Input file: common.enex
+   Output file: 
+     - merge=true: common/common.org 
+     - merge=false: common/*.org and common/common-attachments
   #+END_EXAMPLE
 
 
@@ -50,6 +50,17 @@ Output file:
    #+END_SRC
 
    The output is one or many .org files and a folder with attachments.
+   
+   If you have many enex files in one folder, you can run easily in one script:
+
+#+BEGIN_SRC sh
+#!/bin/bash
+FILES=$HOME/evernote/*.enex
+
+for f in $FILES ; do 
+  ./EverOrg --input=$f --merge=false
+done
+#+END_SRC
 
 ** Platform
 
@@ -60,7 +71,7 @@ Output file:
     on Linux without strange errors. Due to that I decided to write it again
     using Go which has extraordinary cross-compile possibilities.
 
-    Binary files are available in [[https://github.com/aladine/EverOrg/releases][Releases]].
+    Binary files are available in [[https://github.com/mgmart/EverOrg/releases][Releases]].
 
 ** Status 
 *** Known Issues
