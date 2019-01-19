@@ -53,7 +53,6 @@ var (
 func getAttr(attribute string, token html.Token) string {
 	for _, attr := range token.Attr {
 		if attr.Key == attribute {
-			// a := ele.Data + attr.Val
 			return attr.Val
 		}
 	}
@@ -76,7 +75,7 @@ func mimeFiles(token html.Token) (string, string) {
 	return "", ""
 }
 
-// Org mode represantation of Node
+// Org mode representation of Node
 func (nodes Nodes) orgFormat() string {
 
 	var value strings.Builder
@@ -320,7 +319,7 @@ func main() {
 
 		fmt.Println("output: " + currentFilePathName + ".org")
 		if err != nil {
-			fmt.Errorf("err=%v", err)
+			fmt.Println("err", err)
 			return
 		}
 		defer func() { _ = f.Close() }()
@@ -376,6 +375,7 @@ func sanitize(title string) string {
 	title = strings.Replace(title, "(", "", -1)
 	title = strings.Replace(title, ")", "", -1)
 	title = strings.Replace(title, ",", "", -1)
+	title = strings.Replace(title, ":", "", -1)
 	title = strings.Replace(title, "|", "", -1)
 	title = strings.Replace(title, "?", "", -1)
 
