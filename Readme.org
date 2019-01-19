@@ -46,7 +46,7 @@ Output file:
    org-mode with this command:
 
    #+BEGIN_SRC
-   everorg --input common.enex merge=false
+   everorg --input=common.enex --merge=false
    #+END_SRC
 
    The output is one or many .org files and a folder with attachments.
