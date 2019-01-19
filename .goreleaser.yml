@@ -7,7 +7,6 @@ builds:
   - CGO_ENABLED=0
 - goos:
   - darwin
-  - linux
   - windows
 archive:
   name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
