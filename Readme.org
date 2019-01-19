@@ -71,7 +71,7 @@ done
     on Linux without strange errors. Due to that I decided to write it again
     using Go which has extraordinary cross-compile possibilities.
 
-    Binary files are available in [[https://github.com/mgmart/EverOrg/releases][Releases]].
+    Binary files are available in [[https://github.com/aladine/EverOrg/releases][Releases]].
 
 ** Status 
 *** Known Issues
