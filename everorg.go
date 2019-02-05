@@ -293,7 +293,6 @@ func main() {
 	baseName := strings.TrimSuffix(fileName, ext)
 
 	newWrittenDir := filepath.Join(currentDir, baseName)
-	// strings.TrimSuffix(readFile, ext)
 	if _, err = os.Stat(newWrittenDir); os.IsNotExist(err) {
 		_ = os.Mkdir(newWrittenDir, 0711)
 	}
@@ -367,47 +366,6 @@ func main() {
 	fmt.Printf("\nThere are %d notes and %d attachments created", notesCount, attachmentsCount)
 }
 
-func sanitize(title string) string {
-	title = strings.TrimSpace(strings.ToLower(title))
-	title = strings.Replace(title, "-", "", -1)
-	title = strings.Replace(title, "'", "", -1)
-	title = strings.Replace(title, "(", "", -1)
-	title = strings.Replace(title, ")", "", -1)
-	title = strings.Replace(title, ",", "", -1)
-	title = strings.Replace(title, ":", "", -1)
-	title = strings.Replace(title, "|", "", -1)
-	title = strings.Replace(title, "?", "", -1)
-
-	title = strings.Replace(title, " ", "-", -1)
-
-	return title
-}
-
-func createAttachment(attachment Resource, attachmentPath string) error {
-	h := md5.New()
-	sDec, _ := b64.StdEncoding.DecodeString(attachment.Data.Content)
-	_, _ = h.Write(sDec)
-	filename := hex.EncodeToString(h.Sum(nil))
-	ext, err := mime.ExtensionsByType(attachment.Mime)
-	if err != nil {
-		return err
-	}
-
-	var fileExt string
-	if len(ext) > 0 {
-		fileExt = ext[0]
-	} else {
-		fileExt = ".unknwn"
-	}
-	err = ioutil.WriteFile(attachmentPath+"/"+filename+fileExt, sDec, 0644)
-	if err != nil {
-		return err
-	}
-
-	return nil
-
-}
-
 func (note Note) orgProperties() string {
 	var result strings.Builder
 	attr := note.Attributes
@@ -470,4 +428,45 @@ func (note Note) orgProperties() string {
 	}
 
 	return result.String()
+}
+
+func sanitize(title string) string {
+	title = strings.TrimSpace(strings.ToLower(title))
+	title = strings.Replace(title, "-", "", -1)
+	title = strings.Replace(title, "'", "", -1)
+	title = strings.Replace(title, "(", "", -1)
+	title = strings.Replace(title, ")", "", -1)
+	title = strings.Replace(title, ",", "", -1)
+	title = strings.Replace(title, ":", "", -1)
+	title = strings.Replace(title, "|", "", -1)
+	title = strings.Replace(title, "?", "", -1)
+
+	title = strings.Replace(title, " ", "-", -1)
+
+	return title
+}
+
+func createAttachment(attachment Resource, attachmentPath string) error {
+	h := md5.New()
+	sDec, _ := b64.StdEncoding.DecodeString(attachment.Data.Content)
+	_, _ = h.Write(sDec)
+	filename := hex.EncodeToString(h.Sum(nil))
+	ext, err := mime.ExtensionsByType(attachment.Mime)
+	if err != nil {
+		return err
+	}
+
+	var fileExt string
+	if len(ext) > 0 {
+		fileExt = ext[0]
+	} else {
+		fileExt = ".unknwn"
+	}
+	err = ioutil.WriteFile(attachmentPath+"/"+filename+fileExt, sDec, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
