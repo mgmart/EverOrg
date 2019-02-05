@@ -1,7 +1,3 @@
-#+TITLE: README
-#+STARTUP: showall
-
-
 * EverOrg
 
 [[./docs/images/Unicorn.png]]
@@ -57,7 +53,7 @@
 #!/bin/bash
 FILES=$HOME/evernote/*.enex
 
-for f in $FILES ; do 
+for f in $FILES ; do
   ./EverOrg --input=$f --merge=false
 done
 #+END_SRC

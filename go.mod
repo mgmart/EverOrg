@@ -1,3 +1,3 @@
 module github.com/aladine/EverOrg
 
-require golang.org/x/net v0.0.0-20190110200230-915654e7eabc
+require golang.org/x/net v0.0.0-20190125091013-d26f9f9a57f3

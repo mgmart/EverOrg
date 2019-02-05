@@ -53,9 +53,9 @@ type Note struct {
 		Author    string  `xml:"author"`
 		Latitude  float64 `xml:"latitude"`
 		Longitude float64 `xml:"longitude"`
-		Altitude  float64 `xml:"altitude"`
-		Source    string  `xml:"source"`
-		SourceUrl string  `xml:"source-url"`
+		// Altitude  float64 `xml:"altitude"`
+		Source    string `xml:"source"`
+		SourceUrl string `xml:"source-url"`
 	} `xml:"note-attributes"`
 
 	Resources []Resource `xml:"resource"`
@@ -68,14 +68,4 @@ type Resource struct {
 		Content  string `xml:",chardata"`
 		Encoding string `xml:"encoding,attr"`
 	} `xml:"data"`
-}
-
-// Content ...
-type Content struct {
-	Spans []struct {
-		Media []struct {
-			Hash string `xml:"hash,attr"`
-			Type string `xml:"type,attr"`
-		} `xml:"en-media"`
-	} `xml:"span"`
 }
