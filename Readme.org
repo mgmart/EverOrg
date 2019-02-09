@@ -21,11 +21,17 @@
    on would be missing from within org mode. 
 
    EverOrg reads in the file which is given as a parameter and
-   creates an Org file with the same name in the same location as the
-   source file. In this location also an directory with the same name
+   creates one or many Org files with in the new location. In this location also an directory with the same name
    is created where all the attachments are stored. 
+   
+  #+BEGIN_EXAMPLE
+   Input file: common.enex
+   Output file:
+     - merge=true: common/common.org 
+     - merge=false: common/*.org and common/common-attachments
+  #+END_EXAMPLE
 
-   [[./docs/images/directorypath.png]]
+
 
    Every stored attachment is referenced from within the Org document,
    either as an image which could be viewed inline or as an link so
@@ -36,10 +42,21 @@
    org-mode with this command:
 
    #+BEGIN_SRC
-   everorg --input notebook.enex
+   everorg --input=notebook.enex --merge=false
    #+END_SRC
 
-   The output is a .org file and a folder with attachments.
+   The output is one or many .org files and a folder with attachments.
+   
+   If you have many enex files in one folder, you can run easily in one script:
+
+#+BEGIN_SRC sh
+#!/bin/bash
+FILES=$HOME/evernote/*.enex
+
+for f in $FILES ; do
+  ./EverOrg --input=$f --merge=false
+done
+#+END_SRC
 
 ** Platform
 

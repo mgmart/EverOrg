@@ -28,17 +28,21 @@ import "golang.org/x/net/html"
 // Data Structures
 //
 
+// Query ...
 type Query struct {
 	Notes []Note `xml:"note"`
 }
 
+// Node ...
 type Node struct {
 	Token html.Token
 	Text  string
 }
 
+// Nodes ...
 type Nodes []Node
 
+// Note ...
 type Note struct {
 	Title      string   `xml:"title"`
 	Content    string   `xml:"content"`
@@ -49,25 +53,19 @@ type Note struct {
 		Author    string  `xml:"author"`
 		Latitude  float64 `xml:"latitude"`
 		Longitude float64 `xml:"longitude"`
-		Altitude  float64 `xml:"altitude"`
-		Source    string  `xml:"source"`
-		SourceUrl string  `xml:"source-url"`
+		// Altitude  float64 `xml:"altitude"`
+		Source    string `xml:"source"`
+		SourceUrl string `xml:"source-url"`
 	} `xml:"note-attributes"`
 
-	Resource []struct {
-		Mime string `xml:"mime"`
-		Data struct {
-			Content  string `xml:",chardata"`
-			Encoding string `xml:"encoding,attr"`
-		} `xml:"data"`
-	} `xml:"resource"`
+	Resources []Resource `xml:"resource"`
 }
 
-type Content struct {
-	Spans []struct {
-		Media []struct {
-			Hash string `xml:"hash,attr"`
-			Type string `xml:"type,attr"`
-		} `xml:"en-media"`
-	} `xml:"span"`
+// Resource ...
+type Resource struct {
+	Mime string `xml:"mime"`
+	Data struct {
+		Content  string `xml:",chardata"`
+		Encoding string `xml:"encoding,attr"`
+	} `xml:"data"`
 }
