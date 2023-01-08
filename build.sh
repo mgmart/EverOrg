@@ -10,11 +10,11 @@ tar czf $TRGT-windows-386.tgz everorg.exe
 
 # Linux Intel
 GOOS=linux GOARCH=amd64 go build -o everorg
-tar czf $TRGT-windows-amd64.tgz everorg
+tar czf $TRGT-linux-amd64.tgz everorg
 
 # Linux ARM
 GOOS=linux GOARCH=arm go build -o everorg
-tar czf $TRGT-windows-arm.tgz everorg
+tar czf $TRGT-linux-arm.tgz everorg
 
 # MacOS Intel
 GOOS=darwin GOARCH=amd64 go build -o everorg
