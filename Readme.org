@@ -32,10 +32,12 @@
   #+END_EXAMPLE
 
 
-
    Every stored attachment is referenced from within the Org document,
    either as an image which could be viewed inline or as an link so
    that the attachment could be opened easily within an external application.
+
+   If the switch ~-regardDiv~ is set to true EverOrg inserts a newline for every <div> block.
+   Within tables <div> blocks are ignored at any time.
 
 ** Usage
    Export notebooks from Evernote to ENEX files, and then convert them to
