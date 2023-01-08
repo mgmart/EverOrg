@@ -46,7 +46,7 @@ var (
 	attFolderExt   = "-attachments"
 	attachmentPath = ""
 
-	isMerged bool
+	isMerged, rgrdDiv bool
 )
 
 // Get Attributes for html tag
@@ -141,11 +141,14 @@ func (nodes Nodes) orgFormat() string {
 				header++
 
 				// These tags are ignored
-			case "div", "span", "tr", "tbody", "abbr", "th", "thead", "ins", "img":
+			case "span", "tr", "tbody", "abbr", "th", "thead", "ins", "img":
 				break
 			case "sup", "sub", "small", "br", "dl", "dd", "dt", "font", "colgroup", "cite":
 				break
 			case "address", "s", "map", "area", "center", "q":
+				break
+				// only the end tag is regarded
+			case "div":
 				break
 
 			case "hr":
@@ -218,7 +221,10 @@ func (nodes Nodes) orgFormat() string {
 				value.WriteString("\n#+END_SRC\n")
 			case "blockquote":
 				value.WriteString("\n#+END_QUOTE\n")
-
+			case "div":
+				if rgrdDiv && table == 0 {
+					value.WriteString("\n")
+				}
 			}
 		}
 		value.WriteString(node.Text)
@@ -271,6 +277,7 @@ func main() {
 	wordPtr := flag.String("input", "enex File", "relative path to enex file")
 
 	flag.BoolVar(&isMerged, "merge", false, "whether to merge notes to single file")
+	flag.BoolVar(&rgrdDiv, "regardDiv", false, "closing <div> will become newline")
 	flag.Parse()
 	if wordPtr == nil || *wordPtr == "" {
 		panic("input file is missing")
